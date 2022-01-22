@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> <!-- xsd是约束文件 -->
+    <!-- pom版本, 对于 mvn2以及mvn3而言, 只有 4.0.0 -->
     <modelVersion>4.0.0</modelVersion>
+    <!-- 聚合, 以来统一构建项目中所有模块 -->
     <packaging>pom</packaging>
 
+    <!-- 聚合 -->
     <modules>
         <module>cloud-mall-app</module>
         <module>cloud-mall-domain</module>
@@ -19,10 +22,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <!-- 坐标 -->
     <groupId>cloud.mall</groupId>
     <artifactId>cloud-mall</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-
 
     <profiles>
         <profile>
@@ -33,6 +36,7 @@
             <properties>
                 <repackage.classifier>exec</repackage.classifier>
                 <native-buildtools.version>0.9.9</native-buildtools.version>
+                <!--                <exec.mainClass>com.cloud.mall.app.CloudMallAppApplication</exec.mainClass>-->
             </properties>
             <dependencies>
                 <dependency>
@@ -46,6 +50,8 @@
                     <scope>test</scope>
                 </dependency>
             </dependencies>
+
+            <!-- 引入 native-image插件 -->
             <build>
                 <plugins>
                     <plugin>
@@ -53,6 +59,21 @@
                         <artifactId>native-maven-plugin</artifactId>
                         <version>${native-buildtools.version}</version>
                         <extensions>true</extensions>
+                        <!-- 表明 MainClass -->
+                        <!--                        <configuration>-->
+                        <!--                            &lt;!&ndash; https://graalvm.github.io/native-build-tools/0.9.4-SNAPSHOT/maven-plugin.html &ndash;&gt;-->
+                        <!--                            <skip>false</skip>-->
+                        <!--                            <imageName>${project.artifactId}</imageName>-->
+                        <!--                            <mainClass>${exec.mainClass}</mainClass>-->
+                        <!--                            <buildArgs>-->
+                        <!--                                <buildArg>&#45;&#45;no-fallback</buildArg>-->
+                        <!--                            </buildArgs>-->
+                        <!--                            <classpath>-->
+                        <!--                                <param>-->
+                        <!--                                    ${project.build.directory}/${project.artifactId}-${project.version}-shaded.jar-->
+                        <!--                                </param>-->
+                        <!--                            </classpath>-->
+                        <!--                        </configuration>-->
                         <executions>
                             <execution>
                                 <id>test-native</id>
@@ -149,11 +170,17 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- 构建相关信息 -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <!-- 设置编译运行版本 -->
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -178,5 +205,9 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+    <distributionManagement>
+        <!-- todo, 后续存放到阿里云个人版免费仓库中去 -->
+    </distributionManagement>
 
 </project>

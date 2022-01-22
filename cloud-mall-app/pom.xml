@@ -21,31 +21,6 @@
             <groupId>com.cloud.mall.implementation</groupId>
             <artifactId>cloud-mall-implementation</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-web</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-webflux</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.experimental</groupId>-->
-        <!--            <artifactId>spring-native</artifactId>-->
-        <!--            <version>${spring-native.version}</version>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-devtools</artifactId>-->
-        <!--            <scope>runtime</scope>-->
-        <!--            <optional>true</optional>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
-        <!--            <optional>true</optional>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -65,18 +40,22 @@
 
     <build>
         <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--&lt;!&ndash;                    <classifier>${repackage.classifier}</classifier>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <image>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <builder>paketobuildpacks/builder:tiny</builder>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <env>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </env>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </image>&ndash;&gt;-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-<!--                    <classifier>${repackage.classifier}</classifier>-->
-<!--                    <image>-->
-<!--                        <builder>paketobuildpacks/builder:tiny</builder>-->
-<!--                        <env>-->
-<!--                            <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>-->
-<!--                        </env>-->
-<!--                    </image>-->
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

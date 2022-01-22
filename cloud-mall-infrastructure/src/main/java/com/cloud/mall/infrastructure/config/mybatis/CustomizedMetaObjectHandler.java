@@ -1,5 +1,7 @@
 package com.cloud.mall.infrastructure.config.mybatis;
 
+import java.util.Date;
+
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -22,11 +24,18 @@ public class CustomizedMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        //todo
+        metaObject.setValue(gmtCreate, new Date());
+        metaObject.setValue(gmtModified, new Date());
+        // todo, 登录态提取
     }
 
+    /**
+     * metaData 自动更新, 不允许手动更新
+     * @param metaObject
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
-        //todo
+        metaObject.setValue(gmtModified, new Date());
+        // todo, 提取登录态
     }
 }
