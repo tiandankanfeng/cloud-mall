@@ -109,6 +109,7 @@
         <hutool-all.version>5.7.14</hutool-all.version>
         <guava.version>31.0.1-jre</guava.version>
         <spring-native.version>0.11.1</spring-native.version>
+        <durid.version>1.1.22</durid.version>
     </properties>
 
     <dependencyManagement>
@@ -151,6 +152,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <!-- Druid连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${durid.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
