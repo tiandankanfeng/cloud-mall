@@ -25,6 +25,7 @@
     <!-- 坐标 -->
     <groupId>cloud.mall</groupId>
     <artifactId>cloud-mall</artifactId>
+    <!-- 个人仓库已配置, 此出通过版本区分 快照以及稳定仓库 -->
     <version>1.0.0-SNAPSHOT</version>
 
 
@@ -198,8 +199,18 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <!-- 认证凭证信息已存放到本地 setting.xml -->
     <distributionManagement>
-        <!-- todo, 后续存放到阿里云个人版免费仓库中去 -->
+        <repository>
+            <id>rdc-releases</id>
+            <name>rdc-releases-repository</name>
+            <url>https://packages.aliyun.com/maven/repository/2181779-release-DwQmmT/</url>
+        </repository>
+        <snapshotRepository>
+            <id>idc-snapshots</id>
+            <name>rdc-snapshot-repository</name>
+            <url>https://packages.aliyun.com/maven/repository/2181779-snapshot-viuZf0/</url>
+        </snapshotRepository>
     </distributionManagement>
 
 
