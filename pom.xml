@@ -113,6 +113,7 @@
         <durid.version>1.1.22</durid.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger-bootstrap.version>1.9.6</swagger-bootstrap.version>
+        <spring-aop.version>2.3.12.RELEASE</spring-aop.version>
     </properties>
 
     <dependencyManagement>
@@ -180,6 +181,12 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>swagger-bootstrap-ui</artifactId>
                 <version>${swagger-bootstrap.version}</version>
+            </dependency>
+            <!-- aop -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-aop.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
