@@ -111,8 +111,9 @@
         <guava.version>31.0.1-jre</guava.version>
         <spring-native.version>0.11.1</spring-native.version>
         <durid.version>1.1.22</durid.version>
-        <swagger.version>2.9.2</swagger.version>
+        <swagger.version>3.0.0</swagger.version>
         <swagger-bootstrap.version>1.9.6</swagger-bootstrap.version>
+        <swagger-knife4j.version>2.0.9</swagger-knife4j.version>
         <spring-aop.version>2.3.12.RELEASE</spring-aop.version>
     </properties>
 
@@ -163,24 +164,23 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${durid.version}</version>
             </dependency>
-            <!-- swagger 3.0.0版本似乎有兼容问题-->
-            <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+            <!-- 官方 starter -->
             <dependency>
                 <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
+                <artifactId>springfox-boot-starter</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
             <!-- 引入对 swagger-ui的增强 -->
+<!--            <dependency>-->
+<!--                <groupId>com.github.xiaoymin</groupId>-->
+<!--                <artifactId>swagger-bootstrap-ui</artifactId>-->
+<!--                <version>${swagger-bootstrap.version}</version>-->
+<!--            </dependency>-->
+            <!-- 使用对 swagger-ui 轻量级优化版本 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>swagger-bootstrap-ui</artifactId>
-                <version>${swagger-bootstrap.version}</version>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>2.0.9</version>
             </dependency>
             <!-- aop -->
             <dependency>

@@ -1,8 +1,9 @@
 远程仓库已整合完毕, 个人信息凭证存放到本地 setting.xml, deploy时将通过 SNAPSHOT以及 RELEASE
 区分上传至那个仓库.
-基于后期需要和前端伙伴但又懒写 api文档, 因此在项目中集成了 swagger, 这里顺便记录下使用 3.0.0版本下
-页面打不开可能存在兼容问题(使用稳定一版 2.9.2) swagger似乎也有适配 starter一版了, 但写法和拆分单独引进的不太一样, 
-后期尝试整合 starter.
+基于后期需要和前端伙伴但又懒写 api文档, 因此在项目中集成了 swagger, springfox官方已经支持 starter方式引入了, 并不存在兼容问题仅仅是
+swagger-ui的页面链接发生了更变而已, 官方：https://springfox.github.io/springfox/docs/snapshot/#changes-in-swagger-ui
+knife是对 swagger-ui的再优化版本, 确实对 ui功能做了很大增强，官方: https://doc.xiaominfo.com/knife4j/documentation/, 
+从此 api文档不再愁: http://localhost:8000/doc.html
 
 struct:
 原本:
