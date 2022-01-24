@@ -111,6 +111,8 @@
         <guava.version>31.0.1-jre</guava.version>
         <spring-native.version>0.11.1</spring-native.version>
         <durid.version>1.1.22</durid.version>
+        <swagger.version>2.9.2</swagger.version>
+        <swagger-bootstrap.version>1.9.6</swagger-bootstrap.version>
     </properties>
 
     <dependencyManagement>
@@ -159,6 +161,25 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${durid.version}</version>
+            </dependency>
+            <!-- swagger 3.0.0版本似乎有兼容问题-->
+            <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!-- 引入对 swagger-ui的增强 -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>swagger-bootstrap-ui</artifactId>
+                <version>${swagger-bootstrap.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

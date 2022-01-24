@@ -10,7 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
-@SpringBootApplication(scanBasePackages = {"com.cloud.mall.*"})
+@SpringBootApplication(scanBasePackages = {"com.cloud.mall"})
 @MapperScan("com.cloud.mall.infrastructure.mapper")
 public class CloudMallAppApplication implements CommandLineRunner {
 
