@@ -33,6 +33,9 @@ class CloudMallInfrastructureApplicationTests {
         final var decryptCode = ConfigTools.decrypt(publicKey, encryptCode);
         System.out.println(StrUtil.format("私钥:{}, 加密后:{}", privateKey, encryptCode));
         System.out.println(StrUtil.format("公钥:{}, 解密后:{}", publicKey, decryptCode));
+
+        ConfigTools.main("wu913428".split(" "));
+        System.out.println("wu913428".split(" ")[0]);
     }
 
     @Test
