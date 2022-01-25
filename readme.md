@@ -13,3 +13,5 @@ implementation -> domain
 app -> implementation -> infrastructure -> domain
 
 优化后的好处: 可以对 domain层进行细致抽象, domain层解耦的同时也不脱离于其它层存在
+
+涉及到明文存储：初步想法，将公钥存储到数据库中去，秘钥即为数据库名称自身.

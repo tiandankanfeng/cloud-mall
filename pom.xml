@@ -115,6 +115,9 @@
         <swagger-bootstrap.version>1.9.6</swagger-bootstrap.version>
         <swagger-knife4j.version>2.0.9</swagger-knife4j.version>
         <spring-aop.version>2.3.12.RELEASE</spring-aop.version>
+        <commons-logging.version>1.1.1</commons-logging.version>
+        <commons-httpClient.version>3.1</commons-httpClient.version>
+        <commons-codec.version>1.4</commons-codec.version>
     </properties>
 
     <dependencyManagement>
@@ -187,6 +190,22 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-aop</artifactId>
                 <version>${spring-aop.version}</version>
+            </dependency>
+            <!-- SMS短信平台 -->
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons-logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons-httpClient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

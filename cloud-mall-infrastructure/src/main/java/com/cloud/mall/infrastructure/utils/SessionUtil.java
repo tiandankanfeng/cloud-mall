@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
  * @Description: 门户会话工具类
  */
 @UtilityClass
-public class SessionUtils {
+public class SessionUtil {
     /**
      * 使用父子进程间可进行传递的 tl
      * 赋值时机：thread create 浅拷贝
@@ -21,13 +21,13 @@ public class SessionUtils {
      * @return
      */
     public PortalSession currentSession() {
-        return SessionUtils.inheritableThreadLocal.get();
+        return SessionUtil.inheritableThreadLocal.get();
     }
 
     /**
      * 清理
      */
     public void remove() {
-        SessionUtils.inheritableThreadLocal.remove();
+        SessionUtil.inheritableThreadLocal.remove();
     }
 }
