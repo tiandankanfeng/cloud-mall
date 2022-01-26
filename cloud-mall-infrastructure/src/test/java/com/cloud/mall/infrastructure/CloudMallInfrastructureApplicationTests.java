@@ -22,7 +22,7 @@ class CloudMallInfrastructureApplicationTests {
     @Test
     public void testDbOnEncrypt() throws Exception {
         System.out.println("hello world");
-        val userName = "wu913428";
+        val userName = "Wu913428!";
         final String[] keyPair = ConfigTools.genKeyPair(512);
         // 私钥
         val privateKey = keyPair[0];
@@ -34,7 +34,7 @@ class CloudMallInfrastructureApplicationTests {
         System.out.println(StrUtil.format("私钥:{}, 加密后:{}", privateKey, encryptCode));
         System.out.println(StrUtil.format("公钥:{}, 解密后:{}", publicKey, decryptCode));
 
-        ConfigTools.main("wu913428".split(" "));
+        ConfigTools.main("Wu913428!".split(" "));
         System.out.println("wu913428".split(" ")[0]);
     }
 
