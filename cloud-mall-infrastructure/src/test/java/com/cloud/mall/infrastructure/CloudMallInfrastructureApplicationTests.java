@@ -1,5 +1,8 @@
 package com.cloud.mall.infrastructure;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import com.alibaba.druid.filter.config.ConfigTools;
 
 import cn.hutool.core.util.StrUtil;
@@ -40,8 +43,16 @@ class CloudMallInfrastructureApplicationTests {
 
     @Test
     public void testMsgSend() {
-        final Integer code = MsgSendUtil.sendMsg("19855143393", "good night!");
-        System.out.println(MsgCodeEnum.getSendResultByCode(code));
+        final Future<MsgCodeEnum> future = MsgSendUtil.sendMsg("19855143393", "good night!");
+        try {
+            // doSomething
+            final MsgCodeEnum msgCodeEnum = future.get();
+            System.out.println(msgCodeEnum);
+        } catch (final InterruptedException e) {
+            e.printStackTrace();
+        } catch (final ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
 }

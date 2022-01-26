@@ -1,7 +1,15 @@
 package com.cloud.mall.infrastructure.utils;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
+import com.cloud.mall.domain.workbench.msg.model.MsgCodeEnum;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
@@ -17,11 +25,26 @@ import org.apache.commons.httpclient.methods.PostMethod;
 @UtilityClass
 public class MsgSendUtil {
 
-    public static Integer sendMsg(final String receivePhoneNumber, final String content) {
-        final HttpClient client = new HttpClient();
+    private static final ExecutorService executorService;
+
+    static {
+        executorService = new ThreadPoolExecutor(20, 50, 5L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(1024),
+            new ThreadFactoryBuilder().setNameFormat("msg-snd-thread-%d").setDaemon(Boolean.TRUE).build());
+    }
+
+    /**
+     * 仅提供消息发送能力
+     * 对于消息记录需要在外界根据自身需求进行
+     *
+     * @param receivePhoneNumber
+     * @param content
+     * @return
+     */
+    public static Future<MsgCodeEnum> sendMsg(final String receivePhoneNumber, final String content) {
         final PostMethod post = new PostMethod(SMSConfigProperties.smsUrl);
 
-        MsgSendUtil.log.info("uid:{}, key:{}, smsUrl:{}", SMSConfigProperties.uid, SMSConfigProperties.key, SMSConfigProperties.smsUrl);
+        MsgSendUtil.log.info("uid:{}, key:{}, smsUrl:{}", SMSConfigProperties.uid, SMSConfigProperties.key,
+            SMSConfigProperties.smsUrl);
         // 设置转码
         post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=gbk");
 
@@ -34,29 +57,26 @@ public class MsgSendUtil {
         };
 
         post.setRequestBody(data);
+        return MsgSendUtil.doSndMsg(post, receivePhoneNumber);
+    }
 
-        try {
-            // todo, 这块更改成异步
-            client.executeMethod(post);
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
+    private Future<MsgCodeEnum> doSndMsg(final PostMethod post, final String receivePhoneNumber) {
+        final HttpClient client = new HttpClient();
+        // 解析获取手机号码
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                client.executeMethod(post);
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
 
-        // 获取返回相关信息  --> 判断状态码
-        final int statusCode = post.getStatusCode();
-        // todo, 记录短信发送.
-        MsgSendUtil.log.info("message send, phone:{}, statusCode:{}", receivePhoneNumber, statusCode);
+            // 获取返回相关信息  --> 判断状态码
+            final int statusCode = post.getStatusCode();
+            MsgSendUtil.log.info("message send, phone:{}, statusCode:{}", receivePhoneNumber, statusCode);
 
-        String result = "";
-        try {
-            result = new String(post.getResponseBodyAsString().getBytes("gbk"));
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
-
-        post.releaseConnection(); // 非群发消息
-
-        return Integer.parseInt(result);
+            post.releaseConnection(); // 非群发消息
+            return MsgCodeEnum.getMsgEnumByCode(statusCode);
+        });
     }
 
     /**

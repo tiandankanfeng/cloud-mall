@@ -1,5 +1,7 @@
 package com.cloud.mall.domain.workbench.msg.model;
 
+import java.util.Arrays;
+
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -29,7 +31,10 @@ public enum MsgCodeEnum {
     // SMS-短信签名格式不正确接口签名格式为：【签名内容】
     INCORRECT_MESSAGE_SIGNATURE(-51, "SMS-短信签名格式不正确接口签名格式为：【签名内容】"),
     // SMS-IP限制
-    IP_LIMIT(-6, "SMS-IP限制");
+    IP_LIMIT(-6, "SMS-IP限制"),
+    // 状态码不存在
+    STATUS_CODE_NOT_PRESENT(-100, "状态码不存在, 请联系 SMS平台客服!"),
+    MSG_SND_SUCCESS(200, "SMS-f发送成功!");
 
     private final int code;
     private final String desc;
@@ -47,21 +52,14 @@ public enum MsgCodeEnum {
         this.desc = desc;
     }
 
-    public static String getSendResultByCode(final int code) {
-        String msg = StrUtil.EMPTY;
+    public static MsgCodeEnum getMsgEnumByCode(final Integer code) {
         if (code > 0) {
-            msg = "SMS-f发送成功！短信发送数量：" + code + "条";
-        } else {
-            for (final MsgCodeEnum msgCodeEnum : MsgCodeEnum.values()) {
-                if (code == msgCodeEnum.getCode()) {
-                    msg = msgCodeEnum.getDesc();
-                    break;
-                }
-            }
+            return MsgCodeEnum.MSG_SND_SUCCESS;
         }
-        if (StrUtil.isBlank(msg)) {
-            msg = "非法请求 code！";
-        }
-        return msg;
+       return Arrays.stream(MsgCodeEnum.values())
+            .filter(msgCodeEnum -> msgCodeEnum.getCode() == code)
+            .findFirst()
+           // 一般来说都会有对应的状态码
+            .orElse(MsgCodeEnum.STATUS_CODE_NOT_PRESENT);
     }
 }
