@@ -28,11 +28,13 @@
     <!-- 个人仓库已配置, 此出通过版本区分 快照以及稳定仓库 -->
     <version>1.0.0-SNAPSHOT</version>
 
-
+    <!-- 创建本机配置文件 -->
     <profiles>
         <profile>
             <id>native</id>
+            <!-- 指定激活方式 -->
             <activation>
+                <!-- 默认不激活 -->
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
@@ -40,6 +42,7 @@
                 <native-buildtools.version>0.9.9</native-buildtools.version>
             </properties>
             <dependencies>
+                <!-- Spring Native 0.11.2仅支持 Springboot 2.6.3 -->
                 <dependency>
                     <groupId>org.springframework.experimental</groupId>
                     <artifactId>spring-native</artifactId>
@@ -52,7 +55,7 @@
                 </dependency>
             </dependencies>
 
-            <!-- 引入 native-image插件 -->
+            <!-- 引入 native-image插件  -->
             <build>
                 <plugins>
                     <plugin>
@@ -175,11 +178,11 @@
                 <version>${swagger.version}</version>
             </dependency>
             <!-- 引入对 swagger-ui的增强 -->
-<!--            <dependency>-->
-<!--                <groupId>com.github.xiaoymin</groupId>-->
-<!--                <artifactId>swagger-bootstrap-ui</artifactId>-->
-<!--                <version>${swagger-bootstrap.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>com.github.xiaoymin</groupId>-->
+            <!--                <artifactId>swagger-bootstrap-ui</artifactId>-->
+            <!--                <version>${swagger-bootstrap.version}</version>-->
+            <!--            </dependency>-->
             <!-- 使用对 swagger-ui 轻量级优化版本 -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
@@ -223,6 +226,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <!-- 设置编译运行版本 -->
                 <configuration>
                     <source>${maven.compiler.source}</source>
@@ -232,6 +236,7 @@
         </plugins>
     </build>
 
+    <!-- 构建配置 -->
     <repositories>
         <repository>
             <id>spring-releases</id>
@@ -242,6 +247,7 @@
             </snapshots>
         </repository>
     </repositories>
+    <!-- aot插件配置 -->
     <pluginRepositories>
         <pluginRepository>
             <id>spring-releases</id>

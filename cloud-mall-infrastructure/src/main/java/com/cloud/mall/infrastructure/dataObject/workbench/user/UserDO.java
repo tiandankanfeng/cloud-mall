@@ -1,8 +1,13 @@
 package com.cloud.mall.infrastructure.dataObject.workbench.user;
 
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.cloud.mall.domain.workbench.user.model.SexEnum;
+import com.cloud.mall.domain.workbench.user.model.UserIdentityEnum;
 import com.cloud.mall.infrastructure.dataObject.SequenceBaseDO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @Author: 夜痕
@@ -10,6 +15,43 @@ import lombok.Data;
  * @Description: 用户表
  */
 @Data
+//@SuperBuilder(toBuilder = true)
+@TableName("user")
 public class UserDO extends SequenceBaseDO {
+
     private static final long serialVersionUID = -1920169541684607525L;
+
+    /**
+     * 账户, 即昵称
+     */
+    private String account;
+    /**
+     * 加盐
+     */
+    private String pswd;
+
+    private Integer age;
+
+    /**
+     * 头像
+     */
+    private String headImg;
+
+    private String email;
+
+    private String mobile;
+
+    /**
+     * 用户角色
+     */
+    private UserIdentityEnum userIdentity;
+    /**
+     * 标签, 构建用户肖像
+     */
+    private String tags;
+    /**
+     * 性别:M、W
+     */
+    private SexEnum sex;
+
 }

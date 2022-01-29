@@ -1,12 +1,20 @@
 package com.cloud.mall.app.aop;
 
+import java.util.Objects;
+
 import javax.servlet.http.HttpSession;
 
 import cn.hutool.core.util.StrUtil;
+import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
+import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
+import com.cloud.mall.infrastructure.session.PortalSession;
+import com.cloud.mall.infrastructure.utils.SessionUtil;
+import lombok.val;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,6 +29,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class PortalSessionAspect {
 
+    @Autowired
+    private UserWrapper userWrapper;
+
     @Pointcut("@annotation(com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation)")
     public void sessionPointCut() {
     }
@@ -32,21 +43,48 @@ public class PortalSessionAspect {
      * @param joinPoint
      */
     @Around("sessionPointCut()")
-    public static Object doAroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object doAroundMethod(final ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取登陆态信息
-        ServletRequestAttributes servletRequestAttributes
+        final ServletRequestAttributes servletRequestAttributes
             = (ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
-        HttpSession session = servletRequestAttributes.getRequest().getSession();
-        String loginNick = (String)session.getAttribute("userNick");
-        // todo, 根据 nick查询用户昵称并且绑定到当前会话中去
-        // todo, 将查找到的信息与当前请求线程进行绑定, 每个请求对应的便是线程的调度(please care the subsequent clean up ops.)
-        // 返回失败相关信息(甚至可以直接抛出信息校验相关异常)
+        final HttpSession session = servletRequestAttributes.getRequest().getSession();
+        /**
+         * 设定：登陆成功的用户 session中存在 userId, userNick.
+         */
+        final Long userId = (Long)session.getAttribute("userId");
+        val userNick = (String)session.getAttribute("userNick");
+
+        if (0 == userId || Objects.isNull(userId) || StrUtil.isBlank(userNick)) {
+            return new Object();
+        }
+
+        final UserDO userDO = this.userWrapper.queryByUserId(userId);
+        final Boolean authorized = Objects.nonNull(userDO) ?
+            userDO.getAccount().equals(userNick) : Boolean.FALSE;
+
         // todo, can make new aspect or use afterThrowing to handle exp.
-        if (StrUtil.isNotBlank(loginNick)) {
-            Object proceed = joinPoint.proceed();
+        if (authorized) {
+
+            // t根据 nick查询用户昵称并且绑定到当前会话中去
+            var portalSession = SessionUtil.currentSession();
+            if (Objects.isNull(portalSession)) {
+                portalSession = PortalSession.builder()
+                    .userId(userId)
+                    .userNick(userNick)
+                    .userIdentityEnum(userDO.getUserIdentity())
+                    .build();
+                // bind
+                SessionUtil.setCurrentSession(portalSession);
+            }
+            // t将查找到的信息与当前请求线程进行绑定, 每个请求对应的便是线程的调度(please care the subsequent clean up ops.)
+            // 返回失败相关信息(甚至可以直接抛出信息校验相关异常)
+            final Object proceed = joinPoint.proceed();
+            // 清理会话信息
+            SessionUtil.remove();
             // todo, targetMethod invoke over, can do something about Statistics.
             return proceed;
-        } else
+        } else {
             return new Object();
+        }
     }
 }

@@ -25,6 +25,14 @@ public class SessionUtil {
     }
 
     /**
+     * 设置当前会话信息
+     * @param portalSession
+     */
+    public void setCurrentSession(final PortalSession portalSession) {
+        SessionUtil.inheritableThreadLocal.set(portalSession);
+    }
+
+    /**
      * 清理
      */
     public void remove() {

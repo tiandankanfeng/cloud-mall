@@ -7,14 +7,14 @@ package com.cloud.mall.domain.workbench.user.model;
  */
 public enum UserIdentityEnum {
     // code 默认值为 0, 因此从 1开始定义
-    ORDINARY_USER(1, "普通用户"),
-    ADMIN(2, "管理员");
+    ORDINARY_USER(1, "ORDINARY_USER"),
+    ADMIN(2, "ADMIN");
 
     private final Integer code;
 
     private final String desc;
 
-    UserIdentityEnum(Integer code, String desc) {
+    UserIdentityEnum(final Integer code, final String desc) {
         this.code = code;
         this.desc = desc;
     }
