@@ -10,7 +10,9 @@ import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.session.PortalSession;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
 import lombok.val;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -78,14 +80,25 @@ public class PortalSessionAspect {
             }
             // t将查找到的信息与当前请求线程进行绑定, 每个请求对应的便是线程的调度(please care the subsequent clean up ops.)
             // 返回失败相关信息(甚至可以直接抛出信息校验相关异常)
-            final Object proceed = joinPoint.proceed();
-            // 清理会话信息 - 这块实际上只在线程执行完 app对应入口方法后才进行会话信息的清除，如果是方法的内部调用的话经由上述的校验会话
-            // 信息被绑定到当前线程后始终会存在
-            SessionUtil.remove();
+            Object proceed = null;
+            try {
+                proceed = joinPoint.proceed();
+            } catch (final Exception e) {
+                // todo:对异常进行封装, 统一处理; ResultDto
+            } finally {
+                // 清理会话信息 - 这块实际上只在线程执行完 app对应入口方法后才进行会话信息的清除，如果是方法的内部调用的话经由上述的校验会话
+                // 信息被绑定到当前线程后始终会存在
+                SessionUtil.remove();
+            }
             // todo, targetMethod invoke over, can do something about Statistics.
             return proceed;
         } else {
             return new Object();
         }
+    }
+
+    @AfterThrowing(pointcut = "sessionPointCut()", throwing = "throwable")
+    public void afterThrowingAdvice(final JoinPoint joinPoint, final Throwable throwable) {
+        // todo：这里可以来统计下异常出现的次数，但无法终止异常
     }
 }

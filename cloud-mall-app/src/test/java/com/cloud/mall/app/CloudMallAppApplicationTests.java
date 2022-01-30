@@ -1,8 +1,5 @@
 package com.cloud.mall.app;
 
-import cn.hutool.json.JSONObject;
-import com.cloud.mall.domain.workbench.user.model.SexEnum;
-import com.cloud.mall.domain.workbench.user.model.UserIdentityEnum;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
