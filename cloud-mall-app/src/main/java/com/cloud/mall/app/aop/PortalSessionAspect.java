@@ -5,10 +5,14 @@ import java.util.Objects;
 import javax.servlet.http.HttpSession;
 
 import cn.hutool.core.util.StrUtil;
+import com.cloud.mall.domain.workbench.result.ResultDto;
+import com.cloud.mall.domain.workbench.result.StatusCodeEnum;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
+import com.cloud.mall.domain.workbench.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.session.PortalSession;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -29,6 +33,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 @Aspect
 @Component
+@Slf4j
 public class PortalSessionAspect {
 
     @Autowired
@@ -65,9 +70,10 @@ public class PortalSessionAspect {
             userDO.getAccount().equals(userNick) : Boolean.FALSE;
 
         // todo, can make new aspect or use afterThrowing to handle exp.
+        final var resultDto = new ResultDto();
         if (authorized) {
 
-            // t根据 nick查询用户昵称并且绑定到当前会话中去
+            // 根据 nick查询用户昵称并且绑定到当前会话中去
             var portalSession = SessionUtil.currentSession();
             if (Objects.isNull(portalSession)) {
                 portalSession = PortalSession.builder()
@@ -80,20 +86,27 @@ public class PortalSessionAspect {
             }
             // t将查找到的信息与当前请求线程进行绑定, 每个请求对应的便是线程的调度(please care the subsequent clean up ops.)
             // 返回失败相关信息(甚至可以直接抛出信息校验相关异常)
-            Object proceed = null;
             try {
-                proceed = joinPoint.proceed();
+                val proceed = joinPoint.proceed();
+                resultDto.setData(proceed);
             } catch (final Exception e) {
-                // todo:对异常进行封装, 统一处理; ResultDto
+                resultDto.setMsg(e.getMessage());
+                PortalSessionAspect.log.info("ExpStackTrace:{}", e.getStackTrace());
             } finally {
+                if (StrUtil.isBlank(resultDto.getMsg())) {
+                    resultDto.setSuccess(Boolean.TRUE);
+                }
+                resultDto.setCode(StatusCodeEnum.SUCCESS.getCode());
                 // 清理会话信息 - 这块实际上只在线程执行完 app对应入口方法后才进行会话信息的清除，如果是方法的内部调用的话经由上述的校验会话
                 // 信息被绑定到当前线程后始终会存在
                 SessionUtil.remove();
             }
             // todo, targetMethod invoke over, can do something about Statistics.
-            return proceed;
+            return resultDto;
         } else {
-            return new Object();
+            resultDto.setMsg(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
+            resultDto.setCode(StatusCodeEnum.USER_BANNED.getCode());
+            return resultDto;
         }
     }
 
