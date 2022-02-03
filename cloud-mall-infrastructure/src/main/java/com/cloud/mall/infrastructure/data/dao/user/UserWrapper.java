@@ -1,5 +1,7 @@
 package com.cloud.mall.infrastructure.data.dao.user;
 
+import java.util.List;
+
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 
 /**
@@ -14,4 +16,18 @@ public interface UserWrapper {
      * @return
      */
     UserDO queryByUserId(Long userId);
+
+    /**
+     * 根据用户信息进行匹配
+     * @param userParam
+     * @return
+     */
+    List<UserDO> queryByUserParam(UserDO userParam);
+
+    /**
+     * 添加一条记录
+     * @param userEntity
+     * @return
+     */
+    void insertUserRecord(UserDO userEntity);
 }

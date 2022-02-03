@@ -6,6 +6,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
 /**

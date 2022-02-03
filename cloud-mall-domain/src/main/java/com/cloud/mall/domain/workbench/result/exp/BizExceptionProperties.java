@@ -11,7 +11,13 @@ import cn.hutool.core.util.StrUtil;
  */
 public enum BizExceptionProperties {
 
-    USER_NOT_AUTHORIZED("用户未登录或信息认证失败");
+    USER_NOT_AUTHORIZED("用户未登录或信息认证失败"),
+    PARAM_VALIDATE_NOT_PASS("参数校验未通过!"),
+    /**
+     * default
+     */
+    UNKNOWN_SERVER_ERROR("服务端异常"),
+    REPEATABLE_ACCOUNT("用户名重复, 请更换一个新的名称再进行此操作!");
 
     private final String msg;
 

@@ -102,12 +102,11 @@ public class PortalSessionAspect {
                 SessionUtil.remove();
             }
             // todo, targetMethod invoke over, can do something about Statistics.
-            return resultDto;
         } else {
             resultDto.setMsg(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
             resultDto.setCode(StatusCodeEnum.USER_BANNED.getCode());
-            return resultDto;
         }
+        return resultDto;
     }
 
     @AfterThrowing(pointcut = "sessionPointCut()", throwing = "throwable")

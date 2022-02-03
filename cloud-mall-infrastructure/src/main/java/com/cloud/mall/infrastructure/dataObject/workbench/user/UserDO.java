@@ -7,6 +7,7 @@ import com.cloud.mall.domain.workbench.user.model.UserIdentityEnum;
 import com.cloud.mall.infrastructure.dataObject.SequenceBaseDO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -16,6 +17,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 //@SuperBuilder(toBuilder = true)
+@Accessors(chain = true)
 @TableName("user")
 public class UserDO extends SequenceBaseDO {
 
