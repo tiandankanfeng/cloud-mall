@@ -17,7 +17,8 @@ public enum BizExceptionProperties {
      * default
      */
     UNKNOWN_SERVER_ERROR("服务端异常"),
-    REPEATABLE_ACCOUNT("用户名重复, 请更换一个新的名称再进行此操作!");
+    REPEATABLE_ACCOUNT("用户名重复, 请更换一个新的名称再进行此操作!"),
+    CAPTCHA_VALIDATE_NOT_PASS("验证码验证不通过或者已过期!");
 
     private final String msg;
 

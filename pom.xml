@@ -122,6 +122,8 @@
         <commons-httpClient.version>3.1</commons-httpClient.version>
         <commons-codec.version>1.4</commons-codec.version>
         <jasypt.version>3.0.4</jasypt.version>
+        <easy-captcha.version>1.6.2</easy-captcha.version>
+        <redis.version>1.3.8.RELEASE</redis.version>
     </properties>
 
     <dependencyManagement>
@@ -216,6 +218,18 @@
                 <groupId>com.github.ulisesbocchio</groupId>
                 <artifactId>jasypt-spring-boot-starter</artifactId>
                 <version>${jasypt.version}</version>
+            </dependency>
+            <!-- 图形验证码 -->
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>${easy-captcha.version}</version>
+            </dependency>
+            <!-- redis -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-redis</artifactId>
+                <version>${redis.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

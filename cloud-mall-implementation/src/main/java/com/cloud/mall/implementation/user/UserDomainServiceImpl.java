@@ -1,5 +1,7 @@
 package com.cloud.mall.implementation.user;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import cn.hutool.core.collection.CollectionUtil;
@@ -30,7 +32,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         if (CollectionUtil.isNotEmpty(userDOList)) {
             final UserDO userDO = userDOList.get(0);
-            return userDO.getPswd().equals(DigestUtil.md5(pswd, CharsetUtil.UTF_8)) ?
+            return userDO.getPswd().equals(new String(DigestUtil.md5(pswd, CharsetUtil.UTF_8))) ?
                 userDO.getId() : 0L;
         }
         return 0L;
@@ -43,7 +45,7 @@ public class UserDomainServiceImpl implements UserDomainService {
         if (CollectionUtil.isNotEmpty(userDOList)) {
             throw new BizException(BizExceptionProperties.REPEATABLE_ACCOUNT.getMsg());
         }
-
+        // todo, cloud-function
         final String encryptPswd = new String(DigestUtil.md5(pswd, CharsetUtil.UTF_8));
         final UserDO userDO = new UserDO()
             .setAccount(account)
