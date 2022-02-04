@@ -23,4 +23,5 @@ Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存
 
 后期将启用 ZGC.
 
+分布式任务调度器选型：xxx-job, url:`http://sky.liangye-xo.xyz:8050/xxl-job-admin/`
 
