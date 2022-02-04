@@ -30,4 +30,10 @@ public interface UserWrapper {
      * @return
      */
     void insertUserRecord(UserDO userEntity);
+
+    /**
+     * 更新用户信息
+     * @param userEntity
+     */
+    void updateUserInfo(UserDO userEntity);
 }

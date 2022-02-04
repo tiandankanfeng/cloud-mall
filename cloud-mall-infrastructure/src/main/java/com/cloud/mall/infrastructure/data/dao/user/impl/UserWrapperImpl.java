@@ -41,4 +41,9 @@ public class UserWrapperImpl implements UserWrapper {
     public void insertUserRecord(final UserDO userEntity) {
         this.userMapper.insert(userEntity);
     }
+
+    @Override
+    public void updateUserInfo(final UserDO userEntity) {
+        this.userMapper.updateById(userEntity);
+    }
 }

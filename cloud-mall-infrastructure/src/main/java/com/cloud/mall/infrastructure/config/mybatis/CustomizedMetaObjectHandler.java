@@ -3,6 +3,7 @@ package com.cloud.mall.infrastructure.config.mybatis;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.cloud.mall.infrastructure.utils.SessionUtil;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
@@ -23,19 +24,22 @@ public class CustomizedMetaObjectHandler implements MetaObjectHandler {
     private static final String modifiedNick = "modifiedNick";
 
     @Override
-    public void insertFill(MetaObject metaObject) {
-        metaObject.setValue(gmtCreate, new Date());
-        metaObject.setValue(gmtModified, new Date());
-        // todo, 登录态提取
+    public void insertFill(final MetaObject metaObject) {
+        metaObject.setValue(CustomizedMetaObjectHandler.gmtCreate, new Date());
+        metaObject.setValue(CustomizedMetaObjectHandler.gmtModified, new Date());
+        // 提取 session信息
+        metaObject.setValue(CustomizedMetaObjectHandler.createNick, SessionUtil.currentSession().getUserNick());
+        metaObject.setValue(CustomizedMetaObjectHandler.modifiedNick, SessionUtil.currentSession().getUserNick());
     }
 
     /**
      * metaData 自动更新, 不允许手动更新
+     *
      * @param metaObject
      */
     @Override
-    public void updateFill(MetaObject metaObject) {
-        metaObject.setValue(gmtModified, new Date());
-        // todo, 提取登录态
+    public void updateFill(final MetaObject metaObject) {
+        metaObject.setValue(CustomizedMetaObjectHandler.gmtModified, new Date());
+        metaObject.setValue(CustomizedMetaObjectHandler.modifiedNick, SessionUtil.currentSession().getUserNick());
     }
 }

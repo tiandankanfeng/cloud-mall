@@ -1,10 +1,9 @@
 package com.cloud.mall.app.aop;
 
 import java.util.Objects;
-
-import javax.servlet.http.HttpSession;
-
+import javax.servlet.http.Cookie;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.cloud.mall.domain.workbench.result.ResultDto;
 import com.cloud.mall.domain.workbench.result.StatusCodeEnum;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
@@ -54,12 +53,16 @@ public class PortalSessionAspect {
         // 获取登陆态信息
         final ServletRequestAttributes servletRequestAttributes
             = (ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
-        final HttpSession session = servletRequestAttributes.getRequest().getSession();
+        final Cookie[] cookies = servletRequestAttributes.getRequest().getCookies();
         /**
-         * 设定：登陆成功的用户 session中存在 userId, userNick.
+         * 设定：登陆成功的用户 cookie中存在 userId, userNick.
          */
-        final Long userId = (Long)session.getAttribute("userId");
-        val userNick = (String)session.getAttribute("userNick");
+        Long userId = 0L;
+        String userNick = null;
+        for (final Cookie cookie : cookies) {
+            userId = cookie.getName().equals("userId") ? Long.valueOf(cookie.getValue()): userId;
+            userNick = cookie.getName().equals("userNick") ? cookie.getValue() : userNick;
+        }
 
         if (0 == userId || Objects.isNull(userId) || StrUtil.isBlank(userNick)) {
             return new Object();
@@ -84,7 +87,7 @@ public class PortalSessionAspect {
                 // bind
                 SessionUtil.setCurrentSession(portalSession);
             }
-            // t将查找到的信息与当前请求线程进行绑定, 每个请求对应的便是线程的调度(please care the subsequent clean up ops.)
+            // 将查找到的信息与当前请求线程进行绑定, 每个请求对应的便是线程的调度(please care the subsequent clean up ops.)
             // 返回失败相关信息(甚至可以直接抛出信息校验相关异常)
             try {
                 val proceed = joinPoint.proceed();
@@ -106,7 +109,7 @@ public class PortalSessionAspect {
             resultDto.setMsg(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
             resultDto.setCode(StatusCodeEnum.USER_BANNED.getCode());
         }
-        return resultDto;
+        return JSONUtil.toJsonStr(resultDto);
     }
 
     @AfterThrowing(pointcut = "sessionPointCut()", throwing = "throwable")

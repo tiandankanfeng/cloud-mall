@@ -78,10 +78,7 @@ class CloudMallAppApplicationTests {
 
     @Test
     public void testJasypt() {
-        System.out.println(this.encryptor.encrypt("yuandao"));
-        System.out.println(this.encryptor.encrypt("sky.liangye-xo.xyz"));
-        System.out.println(this.encryptor.encrypt("6379"));
-        System.out.println(this.encryptor.encrypt("http://sky.liangye-xo.xyz:8050/xxl-job-admin/"));
+        System.out.println(this.encryptor.encrypt("oss-cn-zhangjiakou.aliyuncs.com"));
     }
 
 }

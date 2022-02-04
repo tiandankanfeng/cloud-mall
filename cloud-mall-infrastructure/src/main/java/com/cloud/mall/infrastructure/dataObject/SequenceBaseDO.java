@@ -22,11 +22,13 @@ public class SequenceBaseDO implements Serializable {
 
     private Long id;
 
+    @TableField(fill = FieldFill.INSERT)
     private String createNick;
 
     @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String modifiedNick;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
