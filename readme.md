@@ -14,5 +14,13 @@ app -> implementation -> infrastructure -> domain
 
 优化后的好处: 可以对 domain层进行细致抽象, domain层解耦的同时也不脱离于其它层存在
 
-涉及到明文存储：初步想法，将公钥存储到数据库中去，秘钥即为数据库名称自身.
+涉及到明文存储：关系型数据库使用 druid，其它敏感字符使用 `jasypt ENC`, 后期将公钥从代码中移除，规避风险
 数据库：docker安装，一分钟即 ok.
+
+Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存储在 session中，服务端根据自身敏感业务需要来去获取用户相关信息
+
+使用 `spring-cloud-function`函数式编写工具方法, 抽取重复功能代码以及优化程序性能
+
+后期将启用 ZGC.
+
+
