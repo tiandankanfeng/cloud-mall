@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.util.StrUtil;
 import com.aliyun.oss.OSSClient;
 import com.cloud.mall.domain.workbench.file.model.Img;
 import com.cloud.mall.domain.workbench.result.exp.BizException;
 import com.cloud.mall.domain.workbench.result.exp.BizExceptionProperties;
+import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +48,7 @@ public class OssManager {
      * @throws IOException
      */
     public synchronized String uploadDocuments(final MultipartFile multipartFile) throws IOException {
-        final long start = System.currentTimeMillis();
+        final Stopwatch stopwatch = Stopwatch.createStarted();
 
         final String fileName = multipartFile.getOriginalFilename();
         String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -73,8 +75,8 @@ public class OssManager {
         String url = null;
         this.ossClient.putObject(this.bucketName, uploadFileName, new ByteArrayInputStream(multipartFile.getBytes()));
         url = this.sufferUrl + uploadFileName;
-        final long end = System.currentTimeMillis();
-        OssManager.log.info("此次文件上传耗费:" + (end - start) / 1000 + "秒");
+
+        OssManager.log.info("此次文件上传耗费:" +  stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms");
         OssManager.log.info("--------->>文件上传成功" + url);
         this.ossClient.shutdown();
         return url;

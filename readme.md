@@ -17,7 +17,8 @@ app -> implementation -> infrastructure -> domain
 涉及到明文存储：关系型数据库使用 druid，其它敏感字符使用 `jasypt ENC`, 后期将公钥从代码中移除，规避风险
 数据库：docker安装，一分钟即 ok.
 
-Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存储在 session中，服务端根据自身敏感业务需要来去获取用户相关信息
+Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存储在 cookie，服务端根据自身敏感业务需要来去获取用户相关信息
+切面中会去校验用户信息, 以及对返回值的统一封装.
 
 使用 `spring-cloud-function`函数式编写工具方法, 抽取重复功能代码以及优化程序性能
 
@@ -25,3 +26,4 @@ Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存
 
 分布式任务调度器选型：xxx-job, url:`http://sky.liangye-xo.xyz:8050/xxl-job-admin/`
 
+todo: 对所有方法进行统一值的封装, 编写其它业务模块, 催下前端哥们可以开始了...
