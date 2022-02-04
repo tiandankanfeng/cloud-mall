@@ -20,7 +20,8 @@ public enum BizExceptionProperties {
     REPEATABLE_ACCOUNT("用户名重复, 请更换一个新的名称再进行此操作!"),
     CAPTCHA_VALIDATE_NOT_PASS("验证码验证不通过或者已过期!"),
     FILE_UPLOAD_FAILED("文件上传失败!"),
-    FILE_NOT_MEET_REQUIREMENT("上传的文件不符合要求");
+    FILE_NOT_MEET_REQUIREMENT("上传的文件不符合要求"),
+    METHOD_INVOKE_SUCCESS("方法请求成功!");
 
     private final String msg;
 

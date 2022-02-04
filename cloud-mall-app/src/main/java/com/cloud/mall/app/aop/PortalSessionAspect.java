@@ -99,6 +99,7 @@ public class PortalSessionAspect {
                 if (StrUtil.isBlank(resultDto.getMsg())) {
                     resultDto.setSuccess(Boolean.TRUE);
                 }
+                resultDto.setMsg(BizExceptionProperties.METHOD_INVOKE_SUCCESS.getMsg());
                 resultDto.setCode(StatusCodeEnum.SUCCESS.getCode());
                 // 清理会话信息 - 这块实际上只在线程执行完 app对应入口方法后才进行会话信息的清除，如果是方法的内部调用的话经由上述的校验会话
                 // 信息被绑定到当前线程后始终会存在
@@ -106,6 +107,7 @@ public class PortalSessionAspect {
             }
             // todo, targetMethod invoke over, can do something about Statistics.
         } else {
+            resultDto.setSuccess(Boolean.FALSE);
             resultDto.setMsg(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
             resultDto.setCode(StatusCodeEnum.USER_BANNED.getCode());
         }
