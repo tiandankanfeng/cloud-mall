@@ -3,10 +3,11 @@ package com.cloud.mall.app.controller;
 import java.io.IOException;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
-import com.cloud.mall.domain.workbench.result.exp.BizException;
-import com.cloud.mall.domain.workbench.result.exp.BizExceptionProperties;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.infrastructure.result.exp.BizException;
+import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @Date: 2022-02-05 12:34 上午
  * @Description: 用户相关控制器
  */
+@Api(tags = "用户管理控制器")
 @RequestMapping("/user")
 @RestController
 public class UserManagerController {

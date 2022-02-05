@@ -18,8 +18,8 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.cloud.mall.infrastructure</groupId>
-            <artifactId>cloud-mall-infrastructure</artifactId>
+            <groupId>com.cloud.mall.domain</groupId>
+            <artifactId>cloud-mall-domain</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>

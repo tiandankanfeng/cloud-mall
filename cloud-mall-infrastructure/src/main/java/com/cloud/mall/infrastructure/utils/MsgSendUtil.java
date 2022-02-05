@@ -7,8 +7,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.cloud.mall.domain.workbench.msg.model.MsgCodeEnum;
+import com.cloud.mall.infrastructure.dataObject.workbench.msg.MsgCodeEnum;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

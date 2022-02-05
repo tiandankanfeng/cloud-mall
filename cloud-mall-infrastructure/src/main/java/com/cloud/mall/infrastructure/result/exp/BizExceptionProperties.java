@@ -1,4 +1,4 @@
-package com.cloud.mall.domain.workbench.result.exp;
+package com.cloud.mall.infrastructure.result.exp;
 
 import java.util.Arrays;
 

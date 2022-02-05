@@ -11,8 +11,14 @@ app -> implementation -> infrastructure
 implementation -> domain
 优化成:
 app -> implementation -> infrastructure -> domain
+最后更改：
+app -> implementation -> domain -> infrastructure
 
-优化后的好处: 可以对 domain层进行细致抽象, domain层解耦的同时也不脱离于其它层存在
+把 domain层进行抽取, 但是这么做存在一些纠结点：domain层离不开表实体, 但实体是存在于基础设施层, 
+实体层存在的地方便是 mybatis-plus归属, 此时只有两种方案：将实体以及 plus依赖存储到领域层, 但领域层
+应该是脱离于基础设施专注于对象模型而存在, 因此我不会这么去做, 
+所以更改为了最后一种：更变依赖设施架构层次
+
 
 涉及到明文存储：关系型数据库使用 druid，其它敏感字符使用 `jasypt ENC`, 后期将公钥从代码中移除，规避风险
 数据库：docker安装，一分钟即 ok.

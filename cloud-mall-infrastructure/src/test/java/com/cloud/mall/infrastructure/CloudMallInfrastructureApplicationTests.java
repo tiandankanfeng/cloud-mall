@@ -6,7 +6,7 @@ import java.util.concurrent.Future;
 import com.alibaba.druid.filter.config.ConfigTools;
 
 import cn.hutool.core.util.StrUtil;
-import com.cloud.mall.domain.workbench.msg.model.MsgCodeEnum;
+import com.cloud.mall.infrastructure.dataObject.workbench.msg.MsgCodeEnum;
 import com.cloud.mall.infrastructure.utils.MsgSendUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;

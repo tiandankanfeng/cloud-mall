@@ -1,8 +1,6 @@
-package com.cloud.mall.domain.workbench.msg.model;
+package com.cloud.mall.infrastructure.dataObject.workbench.msg;
 
 import java.util.Arrays;
-
-import cn.hutool.core.util.StrUtil;
 
 /**
  * @Author: 夜痕

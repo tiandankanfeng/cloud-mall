@@ -35,4 +35,6 @@ public interface UserDomainService {
      * @throws IOException
      */
     String uploadHeadImg(MultipartFile file, Long userId) throws IOException;
+
+
 }

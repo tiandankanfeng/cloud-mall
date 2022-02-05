@@ -1,19 +1,17 @@
 package com.cloud.mall.implementation.user;
 
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import com.cloud.mall.domain.workbench.file.FileUploadService;
-import com.cloud.mall.domain.workbench.result.exp.BizException;
-import com.cloud.mall.domain.workbench.result.exp.BizExceptionProperties;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
+import com.cloud.mall.domain.workbench.file.FileUploadService;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
+import com.cloud.mall.infrastructure.result.exp.BizException;
+import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

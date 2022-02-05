@@ -2,7 +2,7 @@ package com.cloud.mall.infrastructure.session;
 
 import java.io.Serializable;
 
-import com.cloud.mall.domain.workbench.user.model.UserIdentityEnum;
+import com.cloud.mall.infrastructure.dataObject.workbench.user.UserIdentityEnum;
 import lombok.Builder;
 import lombok.Data;
 

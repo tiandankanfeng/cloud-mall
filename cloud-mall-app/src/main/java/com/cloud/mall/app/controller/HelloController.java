@@ -30,7 +30,7 @@ public class HelloController {
     @ApiOperation("hello")
     @GetMapping("/hello")
     public String testOnHello() {
-        return helloService.hello();
+        return this.helloService.hello();
     }
 
     /**
@@ -40,7 +40,7 @@ public class HelloController {
     @ApiOperation("测试数据库连接")
     @GetMapping("/getAllClient")
     public List<ClientDO> getAllData() {
-        return clientWrapper.queryAllData();
+        return this.clientWrapper.queryAllData();
     }
 
 }

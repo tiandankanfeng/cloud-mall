@@ -1,4 +1,4 @@
-package com.cloud.mall.domain.workbench.user.model;
+package com.cloud.mall.infrastructure.dataObject.workbench.user;
 
 /**
  * @Author: 夜痕

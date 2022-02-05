@@ -7,17 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.hutool.core.util.StrUtil;
-import com.cloud.mall.domain.workbench.result.exp.BizException;
-import com.cloud.mall.domain.workbench.result.exp.BizExceptionProperties;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.infrastructure.result.exp.BizException;
+import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
+import com.cloud.mall.infrastructure.utils.RedisManager;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.wf.captcha.utils.CaptchaUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +38,7 @@ public class LoginAndRegistryController {
     @Autowired
     private SimpleFunction simpleFunction;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisManager redisManager;
 
     @ApiOperation("用户认证")
     @GetMapping("/authentication")
@@ -63,7 +63,7 @@ public class LoginAndRegistryController {
         final String key = Joiner.on("-")
             .skipNulls()
             .join(Lists.newArrayList(account, "registry", "captcha"));
-        final String captcha = (String)this.redisTemplate.opsForValue().get(key);
+        final String captcha = (String)this.redisManager.get(key);
         if (StrUtil.isBlank(captcha) || !captcha.equals(graphValidateCode)) {
             throw new BizException(BizExceptionProperties.CAPTCHA_VALIDATE_NOT_PASS.getMsg());
         }
@@ -83,6 +83,6 @@ public class LoginAndRegistryController {
         final String key = Joiner.on("-")
             .skipNulls()
             .join(Lists.newArrayList(account, "registry", "captcha"));
-        this.redisTemplate.opsForValue().set(key, captcha, 5L, TimeUnit.MINUTES);
+        this.redisManager.set(key, captcha, 5L, TimeUnit.MINUTES);
     }
 }

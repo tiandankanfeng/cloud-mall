@@ -9,9 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.util.StrUtil;
 import com.aliyun.oss.OSSClient;
-import com.cloud.mall.domain.workbench.file.model.Img;
-import com.cloud.mall.domain.workbench.result.exp.BizException;
-import com.cloud.mall.domain.workbench.result.exp.BizExceptionProperties;
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,29 +44,15 @@ public class OssManager {
      * @return
      * @throws IOException
      */
-    public synchronized String uploadDocuments(final MultipartFile multipartFile) throws IOException {
+    public synchronized String uploadDocuments(final MultipartFile multipartFile, final String fileType) throws IOException {
         final Stopwatch stopwatch = Stopwatch.createStarted();
 
-        final String fileName = multipartFile.getOriginalFilename();
-        String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+        // 获取文件后缀(不重复)
+        final String ext = "." + fileType;
+
         /**
-         * 稍微来统一下结构
-         */
-        String fileType = "cloud-mall/";
-        /**
-         * 图片上传仅支持 .jpg 和 .png 格式
-         * 这里暂时只来处理文件上传的问题.
          * 需处理好默认单次最大文件上传大小限制.
          */
-        if (Img.jpg.toString().equals(ext) || Img.png.toString().equals(ext)) {
-            fileType += "img/";
-            fileType += "jpg".equals(ext) ? "jpg" : "png";
-        } else {
-            throw new BizException(BizExceptionProperties.FILE_NOT_MEET_REQUIREMENT.getMsg());
-        }
-
-        // 获取文件后缀(不重复)
-        ext = "." + ext;
         final String uploadFileName = this.getFileName(fileType, ext);
 
         String url = null;

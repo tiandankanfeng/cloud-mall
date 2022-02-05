@@ -2,13 +2,9 @@ package com.cloud.mall.infrastructure.dataObject.workbench.user;
 
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cloud.mall.domain.workbench.user.model.SexEnum;
-import com.cloud.mall.domain.workbench.user.model.UserIdentityEnum;
 import com.cloud.mall.infrastructure.dataObject.SequenceBaseDO;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
 
 /**
  * @Author: 夜痕

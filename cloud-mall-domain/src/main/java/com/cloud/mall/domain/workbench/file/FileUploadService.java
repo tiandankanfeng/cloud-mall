@@ -17,4 +17,13 @@ public interface FileUploadService {
      * @throws IOException
      */
     String uploadImg(MultipartFile file) throws IOException;
+
+    /**
+     * 视频上传
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    String uploadVideo(MultipartFile file) throws IOException;
+
 }
