@@ -1,3 +1,6 @@
+Cloud-Mall:基于用户肖像的电商系统
+prd:https://www.processon.com/view/link/61fe5f9e5653bb06de15ad19
+
 远程仓库已整合完毕, 个人信息凭证存放到本地 setting.xml, deploy时将通过 SNAPSHOT以及 RELEASE
 区分上传至那个仓库.
 基于后期需要和前端伙伴但又懒写 api文档, 因此在项目中集成了 swagger, springfox官方已经支持 starter方式引入了, 并不存在兼容问题仅仅是

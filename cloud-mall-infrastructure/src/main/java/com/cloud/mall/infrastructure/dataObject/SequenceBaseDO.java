@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
@@ -33,4 +34,8 @@ public class SequenceBaseDO implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
+
+    @TableLogic(value = "0", delval = "1")
+    @TableField(fill = FieldFill.INSERT)
+    private Integer isDeleted;
 }

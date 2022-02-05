@@ -17,6 +17,7 @@ import com.google.common.collect.Lists;
 import com.wf.captcha.utils.CaptchaUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,19 +44,8 @@ public class LoginAndRegistryController {
     @ApiOperation("用户认证")
     @GetMapping("/authentication")
     public Long validateUserLogin(@RequestParam("account") final String account,
-        @RequestParam("pswd") final String pswd) {
-        if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd))) {
-            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
-        }
-
-        return this.userDomainService.authenticationUserLogin(account, pswd);
-    }
-
-    @ApiOperation("用户注册")
-    @GetMapping("/registry")
-    public Long registerUserAndAuthentication(@RequestParam("account") final String account,
         @RequestParam("pswd") final String pswd,
-        @RequestParam("graphValidateCode") final String graphValidateCode) {
+        @ApiParam("图形验证码") @RequestParam("graphValidateCode") final String graphValidateCode) {
         if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd, graphValidateCode))) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
@@ -67,7 +57,29 @@ public class LoginAndRegistryController {
         if (StrUtil.isBlank(captcha) || !captcha.equals(graphValidateCode)) {
             throw new BizException(BizExceptionProperties.CAPTCHA_VALIDATE_NOT_PASS.getMsg());
         }
-        return this.userDomainService.userAuthentication(account, pswd);
+
+        return this.userDomainService.authenticationUserLogin(account, pswd);
+    }
+
+    @ApiOperation("用户注册")
+    @GetMapping("/registry")
+    public Long registerUserAndAuthentication(@RequestParam("account") final String account,
+        @RequestParam("pswd") final String pswd,
+        @RequestParam("msgCode") final String msgCode) {
+        if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd, msgCode))) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        final String msgKey = Joiner.on("-")
+            .skipNulls()
+            .join(Lists.newArrayList(account, "registry", "msgCode"));
+        final String msgCacheCode = String.valueOf(this.redisManager.get(msgKey));
+
+        if (StrUtil.isBlank(msgCacheCode) || !msgCacheCode.equals(msgCode)) {
+            throw new BizException(BizExceptionProperties.GRAPH_CAPTCHA_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        return this.userDomainService.userAuthentication(account, pswd, msgCacheCode);
     }
 
     @ApiOperation("获取图形验证码")

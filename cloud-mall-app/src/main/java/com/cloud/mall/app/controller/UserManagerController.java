@@ -6,10 +6,13 @@ import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
+import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserManagerController {
     @Autowired
     private UserDomainService userDomainService;
+    @Autowired
+    private SimpleFunction simpleFunction;
 
     @ApiOperation("用户上传头像")
     @PortalSessionAnnotation
@@ -39,5 +44,15 @@ public class UserManagerController {
         } catch (final IOException e) {
             throw new BizException(BizExceptionProperties.FILE_UPLOAD_FAILED.getMsg());
         }
+    }
+
+    @ApiOperation("用户绑定手机号码")
+    @GetMapping("/userBindMobile")
+    public boolean bindMobileToUser(final String account, final String mobile) {
+        if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, mobile))) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        return this.userDomainService.userBindMobile(account, mobile);
     }
 }

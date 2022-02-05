@@ -21,7 +21,9 @@ public enum BizExceptionProperties {
     CAPTCHA_VALIDATE_NOT_PASS("验证码验证不通过或者已过期!"),
     FILE_UPLOAD_FAILED("文件上传失败!"),
     FILE_NOT_MEET_REQUIREMENT("上传的文件不符合要求"),
-    METHOD_INVOKE_SUCCESS("方法请求成功!");
+    METHOD_INVOKE_SUCCESS("方法请求成功!"),
+    MSG_CODE_VALIDATE_NOT_PASS("手机号码校验不通过"),
+    GRAPH_CAPTCHA_VALIDATE_NOT_PASS("图形验证码验证不通过");
 
     private final String msg;
 

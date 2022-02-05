@@ -3,6 +3,7 @@ package com.cloud.mall.app;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ThreadLocalRandom;
 
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.digest.DigestUtil;
@@ -79,6 +80,13 @@ class CloudMallAppApplicationTests {
     @Test
     public void testJasypt() {
         System.out.println(this.encryptor.encrypt("oss-cn-zhangjiakou.aliyuncs.com"));
+    }
+
+    @Test
+    public void testRandom() {
+        final ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
+        System.out.println(threadLocalRandom.nextInt(1000, 10000));
+        System.out.println(threadLocalRandom.nextInt(1000, 10000));
     }
 
 }

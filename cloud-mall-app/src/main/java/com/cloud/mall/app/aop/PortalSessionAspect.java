@@ -44,7 +44,6 @@ public class PortalSessionAspect {
 
     /**
      * 由于 around在特定情况下无法终止原方法的执行, 此处使用环绕通知
-     * todo：针对方法返回值进行状态码封装
      *
      * @param joinPoint
      */
@@ -72,7 +71,6 @@ public class PortalSessionAspect {
         final Boolean authorized = Objects.nonNull(userDO) ?
             userDO.getAccount().equals(userNick) : Boolean.FALSE;
 
-        // todo, can make new aspect or use afterThrowing to handle exp.
         final var resultDto = new ResultDto();
         if (authorized) {
 

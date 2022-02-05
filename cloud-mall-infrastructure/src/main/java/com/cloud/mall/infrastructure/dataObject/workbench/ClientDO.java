@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class ClientDO extends SequenceBaseDO {
 
     private static final long serialVersionUID = 5134808783598127826L;
+
     private String name;
 
     private Integer age;
