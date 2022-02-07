@@ -26,7 +26,8 @@ public enum BizExceptionProperties {
     METHOD_INVOKE_SUCCESS("方法请求成功!"),
     MSG_CODE_VALIDATE_NOT_PASS("手机号码校验不通过"),
     GRAPH_CAPTCHA_VALIDATE_NOT_PASS("图形验证码验证不通过"),
-    ACCOUNT_NOT_ALLOW_MODIFY("用户账户不允许更改!");
+    ACCOUNT_NOT_ALLOW_MODIFY("用户账户不允许更改!"),
+    SHOPPING_MAXIMUM_ARRIVED("购物车数量已满!");
 
     private final String msg;
 

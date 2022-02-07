@@ -3,15 +3,15 @@ package com.cloud.mall.app.controller;
 import java.util.Objects;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
+import com.cloud.mall.domain.workbench.goods.model.GoodsVO;
 import com.cloud.mall.domain.workbench.goods.GoodsDomainService;
-import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.domain.workbench.shopping.ShoppingListDomainService;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
 import com.google.common.collect.Lists;
-import com.google.j2objc.annotations.AutoreleasePool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class GoodsManagerController {
     @Autowired
     private GoodsDomainService goodsDomainService;
+    @Autowired
+    private ShoppingListDomainService shoppingListDomainService;
     @Autowired
     private SimpleFunction simpleFunction;
     @Autowired
@@ -59,5 +61,16 @@ public class GoodsManagerController {
         }
 
         this.goodsWrapper.deleteGoodsById(id);
+    }
+
+    @ApiOperation(("购物车添加新的商品"))
+    @PutMapping("/addNewGoodsIntoList")
+    @PortalSessionAnnotation
+    public void addNewGoodsIntoList(@RequestBody final GoodsVO goodsVO) {
+        if (Objects.isNull(goodsVO)) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        this.shoppingListDomainService.addOrUpdateGoodsInList(goodsVO);
     }
 }

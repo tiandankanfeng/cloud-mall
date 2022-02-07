@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
-import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
