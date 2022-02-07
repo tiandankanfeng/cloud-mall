@@ -13,4 +13,10 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PortalSessionAnnotation {
+
+    /**
+     * 期待用户角色 - 默认是普通用户
+     * @return
+     */
+    boolean expectedUserAdmin() default false;
 }

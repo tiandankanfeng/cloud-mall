@@ -45,4 +45,9 @@ public class GoodsWrapperImpl implements GoodsWrapper {
         final LambdaQueryWrapper<GoodsDO> lambdaQuery = Wrappers.<GoodsDO>lambdaQuery(goodsParam);
         return this.goodsMapper.selectList(lambdaQuery);
     }
+
+    @Override
+    public void deleteGoodsById(final Long id) {
+        this.goodsMapper.deleteById(id);
+    }
 }

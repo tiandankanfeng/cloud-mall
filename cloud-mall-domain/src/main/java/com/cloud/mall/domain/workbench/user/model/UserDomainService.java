@@ -2,6 +2,7 @@ package com.cloud.mall.domain.workbench.user.model;
 
 import java.io.IOException;
 
+import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -45,5 +46,10 @@ public interface UserDomainService {
      */
     Boolean userBindMobile(String account, String mobile);
 
+    /**
+     * 更新用户信息
+     * @param userDO
+     */
+    void updateUserInfo(UserDO userDO);
 
 }

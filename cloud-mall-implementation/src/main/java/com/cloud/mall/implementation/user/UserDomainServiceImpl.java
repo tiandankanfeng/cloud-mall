@@ -12,6 +12,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
 import com.cloud.mall.infrastructure.data.dao.msg.MsgRecordWrapper;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.domain.workbench.file.FileUploadService;
@@ -23,6 +24,7 @@ import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.utils.MsgSendUtil;
 import com.cloud.mall.infrastructure.utils.RedisManager;
+import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,8 @@ public class UserDomainServiceImpl implements UserDomainService {
     private MsgRecordWrapper msgRecordWrapper;
     @Autowired
     private RedisManager redisManager;
+    @Autowired
+    private GoodsWrapper goodsWrapper;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
@@ -122,10 +126,21 @@ public class UserDomainServiceImpl implements UserDomainService {
         return false;
     }
 
+    @Override
+    public void updateUserInfo(final UserDO userDO) {
+        final String userNick = SessionUtil.currentSession().getUserNick();
+        if (!userNick.equals(userDO.getAccount())) {
+            throw new BizException(BizExceptionProperties.ACCOUNT_NOT_ALLOW_MODIFY.getMsg());
+        }
+
+        this.userWrapper.updateUserInfo(userDO);
+    }
+
     private void doUserAuthentication(final UserDO userDO) {
         userDO.setModifiedNick(userDO.getAccount());
         userDO.setCreateNick(userDO.getAccount());
 
         this.userWrapper.insertUserRecord(userDO);
     }
+
 }

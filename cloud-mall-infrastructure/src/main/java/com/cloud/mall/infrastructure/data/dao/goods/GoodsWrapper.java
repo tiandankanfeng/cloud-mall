@@ -29,4 +29,10 @@ public interface GoodsWrapper {
      * @return
      */
     List<GoodsDO> queryGoodsByParam(GoodsDO goodsParam);
+
+    /**
+     * 删除商品信息
+     * @param id
+     */
+    void deleteGoodsById(Long id);
 }

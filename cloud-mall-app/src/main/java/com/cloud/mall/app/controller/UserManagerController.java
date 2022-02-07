@@ -1,9 +1,12 @@
 package com.cloud.mall.app.controller;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
+import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
@@ -14,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,4 +59,17 @@ public class UserManagerController {
 
         return this.userDomainService.userBindMobile(account, mobile);
     }
+
+
+    @ApiOperation("自主更新用户信息")
+    @PostMapping("/updateUserInfo")
+    @PortalSessionAnnotation
+    public void updateUserInfo(@RequestBody final UserDO userDO) {
+        if (Objects.isNull(userDO)) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+
+    }
+
 }

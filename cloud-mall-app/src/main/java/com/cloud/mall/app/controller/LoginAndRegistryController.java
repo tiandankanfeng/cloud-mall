@@ -1,13 +1,17 @@
 package com.cloud.mall.app.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
+import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
@@ -40,6 +44,8 @@ public class LoginAndRegistryController {
     private SimpleFunction simpleFunction;
     @Autowired
     private RedisManager redisManager;
+    @Autowired
+    private UserWrapper userWrapper;
 
     @ApiOperation("用户认证")
     @GetMapping("/authentication")
@@ -69,6 +75,8 @@ public class LoginAndRegistryController {
         if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd, msgCode))) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
+        // 验重账户
+        this.validateUserAccountDistinct(account);
 
         final String msgKey = Joiner.on("-")
             .skipNulls()
@@ -80,6 +88,14 @@ public class LoginAndRegistryController {
         }
 
         return this.userDomainService.userAuthentication(account, pswd, msgCacheCode);
+    }
+
+    private void validateUserAccountDistinct(final String account) {
+        final List<UserDO> userDOList = this.userWrapper.queryByUserParam(new UserDO().setAccount(account));
+
+        if (CollectionUtils.isNotEmpty(userDOList)) {
+            throw new BizException(BizExceptionProperties.ACCOUNT_ALREADY_USERD_BY_OTHERS.getMsg());
+        }
     }
 
     @ApiOperation("获取图形验证码")

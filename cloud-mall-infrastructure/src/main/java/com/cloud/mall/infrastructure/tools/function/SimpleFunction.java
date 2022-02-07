@@ -1,6 +1,7 @@
 package com.cloud.mall.infrastructure.tools.function;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import cn.hutool.core.util.StrUtil;
@@ -19,6 +20,12 @@ public class SimpleFunction {
    public Function<List<String>, Boolean> validateParamNotBlank() {
         return params -> params.stream().filter(StrUtil::isAllNotBlank)
             .anyMatch(StrUtil::isNotBlank);
+    }
+
+    @Bean
+    public Function<List<Long>, Boolean> validateNumValueLegal() {
+        return params -> !params.stream()
+            .anyMatch(param -> param == 0L || Objects.isNull(param));
     }
 
     @Bean
