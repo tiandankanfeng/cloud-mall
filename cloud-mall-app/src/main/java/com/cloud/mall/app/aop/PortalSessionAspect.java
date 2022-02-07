@@ -79,7 +79,7 @@ public class PortalSessionAspect {
         final var resultDto = new ResultDto();
         try {
             if (0 == userId || Objects.isNull(userId) || StrUtil.isBlank(userNick)) {
-                return new BizException(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
+                throw  new BizException(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
             }
 
             final UserDO userDO = this.userWrapper.queryByUserId(userId);
@@ -115,13 +115,20 @@ public class PortalSessionAspect {
             }
         } catch (final Exception exp) {
             resultDto.setMsg(exp.getMessage());
+            resultDto.setSuccess(Boolean.FALSE);
+            if (BizExceptionProperties.USER_NOT_AUTHORIZED.equals(exp.getMessage())) {
+                resultDto.setCode(StatusCodeEnum.USER_BANNED.getCode());
+            } else {
+                resultDto.setCode(StatusCodeEnum.SERVLET_INNER_ERROR.getCode());
+            }
             PortalSessionAspect.log.info("ExpStackTrace:{}", exp.getStackTrace());
         } finally {
             if (StrUtil.isBlank(resultDto.getMsg())) {
                 resultDto.setSuccess(Boolean.TRUE);
+                resultDto.setMsg(BizExceptionProperties.METHOD_INVOKE_SUCCESS.getMsg());
+                resultDto.setCode(StatusCodeEnum.SUCCESS.getCode());
             }
-            resultDto.setMsg(BizExceptionProperties.METHOD_INVOKE_SUCCESS.getMsg());
-            resultDto.setCode(StatusCodeEnum.SUCCESS.getCode());
+
             // 清理会话信息 - 这块实际上只在线程执行完 app对应入口方法后才进行会话信息的清除，如果是方法的内部调用的话经由上述的校验会话
             // 信息被绑定到当前线程后始终会存在
             SessionUtil.remove();

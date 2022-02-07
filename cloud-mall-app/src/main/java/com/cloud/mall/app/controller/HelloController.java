@@ -2,6 +2,7 @@ package com.cloud.mall.app.controller;
 
 import java.util.List;
 
+import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.hello.HelloService;
 import com.cloud.mall.infrastructure.data.dao.client.ClientWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.ClientDO;
@@ -29,6 +30,7 @@ public class HelloController {
 
     @ApiOperation("hello")
     @GetMapping("/hello")
+    @PortalSessionAnnotation(expectedUserAdmin = true)
     public String testOnHello() {
         return this.helloService.hello();
     }
