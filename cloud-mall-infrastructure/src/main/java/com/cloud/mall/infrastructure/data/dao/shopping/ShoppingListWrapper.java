@@ -1,5 +1,7 @@
 package com.cloud.mall.infrastructure.data.dao.shopping;
 
+import java.util.List;
+
 import com.cloud.mall.infrastructure.dataObject.workbench.shopping.ShoppingListDO;
 
 /**
@@ -27,4 +29,11 @@ public interface ShoppingListWrapper {
      * @param quantity
      */
     void updateGoodsInfoFromList(Long shoppingListId, Long quantity);
+
+    /**
+     * 条件匹配
+     * @param shoppingListParam
+     * @return
+     */
+    List<ShoppingListDO> queryByParam(ShoppingListDO shoppingListParam);
 }

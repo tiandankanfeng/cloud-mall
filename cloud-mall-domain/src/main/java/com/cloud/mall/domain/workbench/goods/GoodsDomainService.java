@@ -1,5 +1,7 @@
 package com.cloud.mall.domain.workbench.goods;
 
+import java.util.List;
+
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
 
 /**
@@ -15,4 +17,11 @@ public interface GoodsDomainService {
      * @return
      */
     void publishGoods(GoodsDO goodsDO);
+
+    /**
+     * 根据用户已有 tags显示感兴趣的标签
+     * @param userId
+     * @return
+     */
+    List<GoodsDO> showUserInterestGoodsByKnownTags(Long userId);
 }

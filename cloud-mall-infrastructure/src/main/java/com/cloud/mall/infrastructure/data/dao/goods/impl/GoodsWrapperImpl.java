@@ -50,4 +50,16 @@ public class GoodsWrapperImpl implements GoodsWrapper {
     public void deleteGoodsById(final Long id) {
         this.goodsMapper.deleteById(id);
     }
+
+    @Override
+    public List<GoodsDO> queryGoodsByTagsFuzzySearch(final String tag) {
+        final LambdaQueryWrapper<GoodsDO> lambdaWrapper = Wrappers.<GoodsDO>lambdaQuery()
+            .like(GoodsDO::getTags, tag);
+        return this.goodsMapper.selectList(lambdaWrapper);
+    }
+
+    @Override
+    public GoodsDO queryGoodsByPrimaryId(final Long goodsId) {
+        return this.goodsMapper.selectById(goodsId);
+    }
 }

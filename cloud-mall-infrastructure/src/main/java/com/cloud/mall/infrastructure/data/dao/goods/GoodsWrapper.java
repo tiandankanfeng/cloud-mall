@@ -31,8 +31,22 @@ public interface GoodsWrapper {
     List<GoodsDO> queryGoodsByParam(GoodsDO goodsParam);
 
     /**
+     * 唯一
+     * @param goodsId
+     * @return
+     */
+    GoodsDO queryGoodsByPrimaryId(Long goodsId);
+
+    /**
      * 删除商品信息
      * @param id
      */
     void deleteGoodsById(Long id);
+
+    /**
+     * 根据标签模糊匹配商品
+     * @param tag
+     * @return
+     */
+    List<GoodsDO> queryGoodsByTagsFuzzySearch(String tag);
 }

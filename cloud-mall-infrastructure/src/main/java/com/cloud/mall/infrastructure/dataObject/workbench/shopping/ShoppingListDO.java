@@ -3,6 +3,7 @@ package com.cloud.mall.infrastructure.dataObject.workbench.shopping;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cloud.mall.infrastructure.dataObject.SequenceBaseDO;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @Author: 夜痕
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 @TableName("shopping_list")
 @Data
+@Accessors(chain = true)
 public class ShoppingListDO extends SequenceBaseDO {
     private static final long serialVersionUID = 4565788386549438246L;
     /**
@@ -24,6 +26,7 @@ public class ShoppingListDO extends SequenceBaseDO {
 
     /**
      * 这啥又是啥
+     * @ref GoodsDO
      */
     private String goodsInfo;
 

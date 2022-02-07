@@ -50,6 +50,8 @@ public class GoodsDO extends SequenceBaseDO {
 
     /**
      * 商品上所有标签
+     * 一件商品上可能存在多个标签
+     * 匹配时进行模糊匹配
      */
     private String tags;
 

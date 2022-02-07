@@ -1,5 +1,6 @@
 package com.cloud.mall.app.controller;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
@@ -11,10 +12,12 @@ import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
+import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -72,5 +75,13 @@ public class GoodsManagerController {
         }
 
         this.shoppingListDomainService.addOrUpdateGoodsInList(goodsVO);
+    }
+
+    @ApiOperation("")
+    @GetMapping("/showUserInterestGoodsByKnownTags")
+    @PortalSessionAnnotation
+    public List<GoodsDO> showUserInterestGoodsByKnownTags() {
+        final Long userId = SessionUtil.currentSession().getUserId();
+        return this.goodsDomainService.showUserInterestGoodsByKnownTags(userId);
     }
 }
