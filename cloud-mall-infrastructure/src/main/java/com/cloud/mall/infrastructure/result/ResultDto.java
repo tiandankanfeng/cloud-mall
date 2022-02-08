@@ -1,6 +1,9 @@
 package com.cloud.mall.infrastructure.result;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Author: 夜痕
@@ -8,6 +11,9 @@ import lombok.Data;
  * @Description:
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResultDto<T> {
     /**
      * 真实数据
@@ -25,9 +31,6 @@ public class ResultDto<T> {
      * 异常信息
      */
     private String msg;
-
-    public ResultDto() {
-    }
 
     public ResultDto(final T data) {
         this.data = data;
