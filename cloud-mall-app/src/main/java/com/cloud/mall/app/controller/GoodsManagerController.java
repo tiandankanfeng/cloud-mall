@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Objects;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
+import com.cloud.mall.domain.workbench.cates.CatesDomainService;
+import com.cloud.mall.domain.workbench.cates.model.Cate1sVO;
 import com.cloud.mall.domain.workbench.goods.model.GoodsVO;
 import com.cloud.mall.domain.workbench.goods.GoodsDomainService;
 import com.cloud.mall.domain.workbench.shopping.ShoppingListDomainService;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
+import com.cloud.mall.infrastructure.dataObject.workbench.cate.CatesDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
 import com.cloud.mall.infrastructure.result.ResultDto;
 import com.cloud.mall.infrastructure.result.exp.BizException;
@@ -19,6 +22,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +44,8 @@ public class GoodsManagerController {
     private GoodsDomainService goodsDomainService;
     @Autowired
     private ShoppingListDomainService shoppingListDomainService;
+    @Autowired
+    private CatesDomainService catesDomainService;
     @Autowired
     private SimpleFunction simpleFunction;
     @Autowired
@@ -82,7 +88,7 @@ public class GoodsManagerController {
         return new ResultDto<>();
     }
 
-    @ApiOperation("")
+    @ApiOperation("根据用户已有标签展示商品信息")
     @GetMapping("/showUserInterestGoodsByKnownTags")
     @PortalSessionAnnotation
     public ResultDto<List<GoodsDO>> showUserInterestGoodsByKnownTags() {
@@ -91,4 +97,35 @@ public class GoodsManagerController {
         resultDto.setData(this.goodsDomainService.showUserInterestGoodsByKnownTags(userId));
         return resultDto;
     }
+
+    @ApiOperation("添加或更新类目信息")
+    @PostMapping("/addOrUpdateCates")
+    @PortalSessionAnnotation(expectedUserAdmin = true)
+    public ResultDto<Void> addOrUpdateCates(@RequestBody final CatesDO catesEntity) {
+        if (Objects.isNull(catesEntity)) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        this.catesDomainService.addOrUpdateCates(catesEntity);
+        return new ResultDto<>();
+    }
+
+    @ApiOperation("删除类目信息")
+    @DeleteMapping("/deleteCates")
+    @PortalSessionAnnotation
+    public ResultDto<Void> deleteCates(@RequestBody final CatesDO catesParam) {
+        if (Objects.isNull(catesParam)) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        this.catesDomainService.deleteCatesByParam(catesParam);
+        return new ResultDto<>();
+    }
+
+    @ApiOperation("显示所有一级类目信息")
+    @GetMapping("/showAllCate1sInfo")
+    public ResultDto<Cate1sVO> showAllCate1sInfo() {
+        return new ResultDto(this.catesDomainService.showAllCate1sInfo());
+    }
+
 }
