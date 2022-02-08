@@ -50,7 +50,6 @@ public class GoodsManagerController {
     private SimpleFunction simpleFunction;
     @Autowired
     private GoodsWrapper goodsWrapper;
-    
 
     @ApiOperation("商家发布或更新商品")
     @PostMapping("/publishGoods")
@@ -96,6 +95,16 @@ public class GoodsManagerController {
         val resultDto = new ResultDto<List<GoodsDO>>();
         resultDto.setData(this.goodsDomainService.showUserInterestGoodsByKnownTags(userId));
         return resultDto;
+    }
+
+    @ApiOperation("/根据商品名称模糊匹配商品信息")
+    @GetMapping("/distinctSearchGoods")
+    public ResultDto<List<GoodsDO>> distinctSearchGoods(final String distinctParam) {
+        if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(distinctParam))) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        return new ResultDto(this.goodsDomainService.distinctGoodsInfo(distinctParam));
     }
 
     @ApiOperation("添加或更新类目信息")

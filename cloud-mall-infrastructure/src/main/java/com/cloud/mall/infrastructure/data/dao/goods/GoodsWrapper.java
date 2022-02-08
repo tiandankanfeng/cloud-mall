@@ -49,4 +49,11 @@ public interface GoodsWrapper {
      * @return
      */
     List<GoodsDO> queryGoodsByTagsFuzzySearch(String tag);
+
+    /**
+     * 模糊匹配商品信息
+     * @param distinctParam
+     * @return
+     */
+    List<GoodsDO> distinctSearchGoodsInfo(String distinctParam);
 }

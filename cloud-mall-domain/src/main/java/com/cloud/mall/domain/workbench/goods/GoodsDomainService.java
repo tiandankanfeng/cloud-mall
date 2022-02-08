@@ -24,4 +24,11 @@ public interface GoodsDomainService {
      * @return
      */
     List<GoodsDO> showUserInterestGoodsByKnownTags(Long userId);
+
+    /**
+     * 模糊匹配商品信息
+     * @param distinctParam
+     * @return
+     */
+    List<GoodsDO> distinctGoodsInfo(String distinctParam);
 }

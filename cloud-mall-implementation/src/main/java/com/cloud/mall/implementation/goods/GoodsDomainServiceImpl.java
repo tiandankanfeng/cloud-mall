@@ -61,4 +61,10 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
 
         return res;
     }
+
+    @Override
+    public List<GoodsDO> distinctGoodsInfo(final String distinctParam) {
+        // todo, 根据用户标签进行筛选排序
+        return this.goodsWrapper.distinctSearchGoodsInfo(distinctParam);
+    }
 }

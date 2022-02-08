@@ -62,4 +62,11 @@ public class GoodsWrapperImpl implements GoodsWrapper {
     public GoodsDO queryGoodsByPrimaryId(final Long goodsId) {
         return this.goodsMapper.selectById(goodsId);
     }
+
+    @Override
+    public List<GoodsDO> distinctSearchGoodsInfo(final String distinctParam) {
+        final LambdaQueryWrapper<GoodsDO> lambdaWrapper = Wrappers.<GoodsDO>lambdaQuery()
+            .like(GoodsDO::getTradeName, distinctParam);
+        return this.goodsMapper.selectList(lambdaWrapper);
+    }
 }
