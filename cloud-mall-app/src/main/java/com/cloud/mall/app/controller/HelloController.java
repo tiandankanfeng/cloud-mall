@@ -6,8 +6,10 @@ import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.hello.HelloService;
 import com.cloud.mall.infrastructure.data.dao.client.ClientWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.ClientDO;
+import com.cloud.mall.infrastructure.result.ResultDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +33,9 @@ public class HelloController {
     @ApiOperation("hello")
     @GetMapping("/hello")
     @PortalSessionAnnotation(expectedUserAdmin = true)
-    public String testOnHello() {
-        return this.helloService.hello();
+    public ResultDto<String> testOnHello() {
+        val resultDto = new ResultDto<>(this.helloService.hello());
+        return resultDto;
     }
 
     /**
@@ -41,8 +44,8 @@ public class HelloController {
      */
     @ApiOperation("测试数据库连接")
     @GetMapping("/getAllClient")
-    public List<ClientDO> getAllData() {
-        return this.clientWrapper.queryAllData();
+    public ResultDto<List<ClientDO>> getAllData() {
+        return new ResultDto<>(this.clientWrapper.queryAllData());
     }
 
 }

@@ -109,14 +109,12 @@ public class PortalSessionAspect {
 
                 // todo, targetMethod invoke over, can do something about Statistics.
             } else {
-                resultDto.setSuccess(Boolean.FALSE);
-                resultDto.setMsg(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
-                resultDto.setCode(StatusCodeEnum.USER_BANNED.getCode());
+                throw new BizException(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
             }
         } catch (final Exception exp) {
             resultDto.setMsg(exp.getMessage());
             resultDto.setSuccess(Boolean.FALSE);
-            if (BizExceptionProperties.USER_NOT_AUTHORIZED.equals(exp.getMessage())) {
+            if (BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg().equals(exp.getMessage())) {
                 resultDto.setCode(StatusCodeEnum.USER_BANNED.getCode());
             } else {
                 resultDto.setCode(StatusCodeEnum.SERVLET_INNER_ERROR.getCode());
@@ -134,7 +132,7 @@ public class PortalSessionAspect {
             SessionUtil.remove();
         }
 
-        return JSONUtil.toJsonStr(resultDto);
+        return resultDto;
     }
 
     @AfterThrowing(pointcut = "sessionPointCut()", throwing = "throwable")

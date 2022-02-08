@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
+import com.cloud.mall.infrastructure.result.ResultDto;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
@@ -39,11 +40,11 @@ public class UserManagerController {
     @ApiOperation("用户上传头像")
     @PortalSessionAnnotation
     @PostMapping("/headImgUpload")
-    public String uploadHeadImg(@RequestParam(value = "file", defaultValue = "null") final MultipartFile file) {
+    public ResultDto<String> uploadHeadImg(@RequestParam(value = "file", defaultValue = "null") final MultipartFile file) {
         try {
             final Long userId = SessionUtil.currentSession().getUserId();
             System.out.println("userId:" + userId);
-            return this.userDomainService.uploadHeadImg(file, userId);
+            return new ResultDto<>(this.userDomainService.uploadHeadImg(file, userId));
         } catch (final IOException e) {
             throw new BizException(BizExceptionProperties.FILE_UPLOAD_FAILED.getMsg());
         }
@@ -51,24 +52,25 @@ public class UserManagerController {
 
     @ApiOperation("用户绑定手机号码")
     @GetMapping("/userBindMobile")
-    public boolean bindMobileToUser(final String account, final String mobile) {
+    public ResultDto<Boolean> bindMobileToUser(final String account, final String mobile) {
         if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, mobile))) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
 
-        return this.userDomainService.userBindMobile(account, mobile);
+        return new ResultDto<>(this.userDomainService.userBindMobile(account, mobile));
     }
 
 
     @ApiOperation("自主更新用户信息")
     @PostMapping("/updateUserInfo")
     @PortalSessionAnnotation
-    public void updateUserInfo(@RequestBody final UserDO userDO) {
+    public ResultDto<Void> updateUserInfo(@RequestBody final UserDO userDO) {
         if (Objects.isNull(userDO)) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
 
-
+        this.userDomainService.updateUserInfo(userDO);
+        return new ResultDto<>();
     }
 
 }

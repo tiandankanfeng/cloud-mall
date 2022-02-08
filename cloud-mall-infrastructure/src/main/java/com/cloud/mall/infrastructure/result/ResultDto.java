@@ -25,4 +25,11 @@ public class ResultDto<T> {
      * 异常信息
      */
     private String msg;
+
+    public ResultDto() {
+    }
+
+    public ResultDto(final T data) {
+        this.data = data;
+    }
 }

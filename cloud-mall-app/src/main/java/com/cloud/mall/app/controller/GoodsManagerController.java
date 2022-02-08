@@ -9,6 +9,7 @@ import com.cloud.mall.domain.workbench.goods.GoodsDomainService;
 import com.cloud.mall.domain.workbench.shopping.ShoppingListDomainService;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
+import com.cloud.mall.infrastructure.result.ResultDto;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
@@ -16,6 +17,7 @@ import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,41 +49,46 @@ public class GoodsManagerController {
     @ApiOperation("商家发布或更新商品")
     @PostMapping("/publishGoods")
     @PortalSessionAnnotation(expectedUserAdmin = true)
-    public void publishGoods(@RequestBody final GoodsDO goodsDO) {
+    public ResultDto<Void> publishGoods(@RequestBody final GoodsDO goodsDO) {
         if (Objects.isNull(goodsDO)) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
 
         this.goodsDomainService.publishGoods(goodsDO);
+        return new ResultDto<>();
     }
 
     @ApiOperation("商家下架商品")
     @PutMapping("/goodsOffShelf/{id}")
     @PortalSessionAnnotation(expectedUserAdmin = true)
-    public void goodsOffShelf(@PathVariable("id") final Long id) {
+    public ResultDto<Void> goodsOffShelf(@PathVariable("id") final Long id) {
         if (!this.simpleFunction.validateNumValueLegal().apply(Lists.newArrayList(id))) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
 
         this.goodsWrapper.deleteGoodsById(id);
+        return new ResultDto<>();
     }
 
     @ApiOperation(("购物车添加新的商品"))
     @PutMapping("/addNewGoodsIntoList")
     @PortalSessionAnnotation
-    public void addNewGoodsIntoList(@RequestBody final GoodsVO goodsVO) {
+    public ResultDto<Void> addNewGoodsIntoList(@RequestBody final GoodsVO goodsVO) {
         if (Objects.isNull(goodsVO)) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
 
         this.shoppingListDomainService.addOrUpdateGoodsInList(goodsVO);
+        return new ResultDto<>();
     }
 
     @ApiOperation("")
     @GetMapping("/showUserInterestGoodsByKnownTags")
     @PortalSessionAnnotation
-    public List<GoodsDO> showUserInterestGoodsByKnownTags() {
+    public ResultDto<List<GoodsDO>> showUserInterestGoodsByKnownTags() {
         final Long userId = SessionUtil.currentSession().getUserId();
-        return this.goodsDomainService.showUserInterestGoodsByKnownTags(userId);
+        val resultDto = new ResultDto<List<GoodsDO>>();
+        resultDto.setData(this.goodsDomainService.showUserInterestGoodsByKnownTags(userId));
+        return resultDto;
     }
 }

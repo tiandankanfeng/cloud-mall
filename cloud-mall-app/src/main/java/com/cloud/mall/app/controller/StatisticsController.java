@@ -2,6 +2,7 @@ package com.cloud.mall.app.controller;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.statistics.StatisticsDomainService;
+import com.cloud.mall.infrastructure.result.ResultDto;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
@@ -32,7 +33,7 @@ public class StatisticsController {
     @ApiOperation("统计用户在页面上对商品的点击")
     @PutMapping("/statisticsUserClickOnPages")
     @PortalSessionAnnotation
-    public void statisticsUserClickOnPages(@PathVariable("goodsId") final Long goodsId) {
+    public ResultDto<Void> statisticsUserClickOnPages(@PathVariable("goodsId") final Long goodsId) {
         if (!this.simpleFunction.validateNumValueLegal().apply(Lists.newArrayList(goodsId))) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
@@ -40,13 +41,15 @@ public class StatisticsController {
         final Long userId = SessionUtil.currentSession().getUserId();
 
         this.statisticsDomainService.statisticsUserClickOnPages(userId, goodsId);
+        return new ResultDto<>();
     }
 
     @ApiOperation("更新用户购物车统计信息")
     @PutMapping("/statisticsShoppingLists")
     @PortalSessionAnnotation
-    public void statisticsShoppingLists() {
+    public ResultDto<Void> statisticsShoppingLists() {
         final Long userId = SessionUtil.currentSession().getUserId();
         this.statisticsDomainService.statisticsShoppingLists(userId);
+        return new ResultDto<>();
     }
 }

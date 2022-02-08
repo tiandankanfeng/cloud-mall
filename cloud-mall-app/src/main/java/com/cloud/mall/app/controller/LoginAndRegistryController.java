@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
+import com.cloud.mall.infrastructure.result.ResultDto;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
@@ -49,7 +50,7 @@ public class LoginAndRegistryController {
 
     @ApiOperation("用户认证")
     @GetMapping("/authentication")
-    public Long validateUserLogin(@RequestParam("account") final String account,
+    public ResultDto<Long> validateUserLogin(@RequestParam("account") final String account,
         @RequestParam("pswd") final String pswd,
         @ApiParam("图形验证码") @RequestParam("graphValidateCode") final String graphValidateCode) {
         if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd, graphValidateCode))) {
@@ -64,12 +65,12 @@ public class LoginAndRegistryController {
             throw new BizException(BizExceptionProperties.CAPTCHA_VALIDATE_NOT_PASS.getMsg());
         }
 
-        return this.userDomainService.authenticationUserLogin(account, pswd);
+        return new ResultDto<>(this.userDomainService.authenticationUserLogin(account, pswd));
     }
 
     @ApiOperation("用户注册")
     @GetMapping("/registry")
-    public Long registerUserAndAuthentication(@RequestParam("account") final String account,
+    public ResultDto<Long> registerUserAndAuthentication(@RequestParam("account") final String account,
         @RequestParam("pswd") final String pswd,
         @RequestParam("msgCode") final String msgCode) {
         if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd, msgCode))) {
@@ -87,20 +88,22 @@ public class LoginAndRegistryController {
             throw new BizException(BizExceptionProperties.GRAPH_CAPTCHA_VALIDATE_NOT_PASS.getMsg());
         }
 
-        return this.userDomainService.userAuthentication(account, pswd, msgCacheCode);
+        return new ResultDto<>(this.userDomainService.userAuthentication(account, pswd, msgCacheCode));
     }
 
-    private void validateUserAccountDistinct(final String account) {
+    private ResultDto<Void> validateUserAccountDistinct(final String account) {
         final List<UserDO> userDOList = this.userWrapper.queryByUserParam(new UserDO().setAccount(account));
 
         if (CollectionUtils.isNotEmpty(userDOList)) {
             throw new BizException(BizExceptionProperties.ACCOUNT_ALREADY_USERD_BY_OTHERS.getMsg());
         }
+
+        return new ResultDto<>();
     }
 
     @ApiOperation("获取图形验证码")
     @PostMapping("/getCaptcha")
-    public void getCaptcha(final HttpServletRequest request, final HttpServletResponse response,
+    public ResultDto<Void> getCaptcha(final HttpServletRequest request, final HttpServletResponse response,
         @RequestParam("account") final String account) throws IOException {
         CaptchaUtil.out(request, response);
         final String captcha = (String)request.getSession().getAttribute("captcha");
@@ -112,5 +115,7 @@ public class LoginAndRegistryController {
             .skipNulls()
             .join(Lists.newArrayList(account, "registry", "captcha"));
         this.redisManager.set(key, captcha, 5L, TimeUnit.MINUTES);
+
+        return new ResultDto<>();
     }
 }
