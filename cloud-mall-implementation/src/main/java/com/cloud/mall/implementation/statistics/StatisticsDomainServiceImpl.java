@@ -13,7 +13,9 @@ import com.cloud.mall.infrastructure.data.dao.statistics.StatisticsWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.shopping.ShoppingListDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.statistics.StatisticsDO;
+import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +32,15 @@ public class StatisticsDomainServiceImpl implements StatisticsDomainService {
     private GoodsWrapper goodsWrapper;
     @Autowired
     private ShoppingListWrapper shoppingListWrapper;
+    @Autowired
+    private SimpleFunction simpleFunction;
 
     @Override
     public void statisticsUserClickOnPages(final Long userId, final Long goodsId) {
+        this.statisticsUserClickOnPages(userId, goodsId, null);
+    }
+
+    private void statisticsUserClickOnPages(final Long userId, final Long goodsId, final Long givenHits) {
         final GoodsDO goodsDO = this.goodsWrapper.queryGoodsByPrimaryId(goodsId);
         if (Objects.nonNull(goodsDO)) { // insert
             Splitter.on(",")
@@ -42,11 +50,13 @@ public class StatisticsDomainServiceImpl implements StatisticsDomainService {
                     final StatisticsDO statisticsDO = new StatisticsDO()
                         .setUserId(userId)
                         .setTag(tag);
-                    final List<StatisticsDO> statisticsDOS = this.statisticsWrapper.queryByParam(statisticsDO);
+                    final List<StatisticsDO> statisticsDOS = this.statisticsWrapper.queryByParamAndOrderByHits(statisticsDO);
 
                     if (CollectionUtils.isNotEmpty(statisticsDOS)) { // snapshot update
                         Long hits = statisticsDO.getHits();
-                        statisticsDO.setHits(++hits);
+                        statisticsDO.setHits(
+                            this.simpleFunction.validateNumValueLegal().apply(Lists.newArrayList(givenHits)) ?
+                            hits + givenHits : ++ hits);
                         this.statisticsWrapper.updateUserInterestTags(statisticsDO);
                     } else { // insert
                         final StatisticsDO statisticsEntity = new StatisticsDO()
@@ -71,7 +81,8 @@ public class StatisticsDomainServiceImpl implements StatisticsDomainService {
                 .forEach(shoppingListDO -> {
                     final GoodsDO goodsDO = JSON.parseObject(String.valueOf(shoppingListDO),
                         GoodsDO.class);
-                    this.statisticsUserClickOnPages(userId, goodsDO.getId());
+                    // 加入购物车的权重暂时定位：5
+                    this.statisticsUserClickOnPages(userId, goodsDO.getId(), 5L);
                 });
         }
     }

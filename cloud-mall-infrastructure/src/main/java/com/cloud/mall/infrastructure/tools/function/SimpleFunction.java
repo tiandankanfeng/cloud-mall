@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -32,4 +34,13 @@ public class SimpleFunction {
     public Function<String, String> toUpperCase() {
         return value -> value.toUpperCase();
     }
+
+    /**
+     * md5 加密
+     */
+    @Bean
+    public Function<String, String> encryptCode() {
+        return plainText -> new String(DigestUtil.md5(plainText, CharsetUtil.UTF_8));
+    }
+
 }

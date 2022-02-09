@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.servlet.http.Cookie;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
@@ -18,7 +17,6 @@ import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
 import com.cloud.mall.infrastructure.session.PortalSession;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -108,7 +106,6 @@ public class PortalSessionAspect {
                         // bind
                         SessionUtil.setCurrentSession(portalSession);
                     }
-                    // todo, targetMethod invoke over, can do something about Statistics.
                 } else {
                     throw new BizException(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg());
                 }

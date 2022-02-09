@@ -28,5 +28,5 @@ public interface StatisticsWrapper {
      * @param statisticsParam
      * @return
      */
-    List<StatisticsDO> queryByParam(StatisticsDO statisticsParam);
+    List<StatisticsDO> queryByParamAndOrderByHits(StatisticsDO statisticsParam);
 }

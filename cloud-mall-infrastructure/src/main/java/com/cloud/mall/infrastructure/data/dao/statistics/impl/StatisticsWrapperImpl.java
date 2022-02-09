@@ -33,13 +33,15 @@ public class StatisticsWrapperImpl implements StatisticsWrapper {
     }
 
     @Override
-    public List<StatisticsDO> queryByParam(final StatisticsDO statisticsParam) {
+    public List<StatisticsDO> queryByParamAndOrderByHits(final StatisticsDO statisticsParam) {
         if (Objects.isNull(statisticsParam)) {
             return Lists.newArrayList();
         }
 
+
         final LambdaQueryWrapper<StatisticsDO> lambdaQuery = Wrappers.<StatisticsDO>lambdaQuery(
-            statisticsParam);
+                statisticsParam)
+            .orderByDesc(StatisticsDO::getHits);
         return this.statisticsMapper.selectList(lambdaQuery);
     }
 }

@@ -1,6 +1,7 @@
 package com.cloud.mall.domain.workbench.user.model;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,5 +52,14 @@ public interface UserDomainService {
      * @param userDO
      */
     void updateUserInfo(UserDO userDO);
+
+    /**
+     * 根据统计数据更新用户标签后将最新标签返回
+     * 这是本项目的关键核心
+     * all algorithm would be here.
+     * @param userId
+     * @return
+     */
+    List<String> updateUserTagsByStatistics(Long userId);
 
 }

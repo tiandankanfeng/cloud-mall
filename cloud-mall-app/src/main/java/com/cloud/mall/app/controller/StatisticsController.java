@@ -44,6 +44,10 @@ public class StatisticsController {
         return new ResultDto<>();
     }
 
+    /**
+     * 商品添加进入了购物车理应对应 tags权重相较而言而更高一些
+     * @return
+     */
     @ApiOperation("更新用户购物车统计信息")
     @PutMapping("/statisticsShoppingLists")
     @PortalSessionAnnotation

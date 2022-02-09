@@ -97,7 +97,7 @@ public class GoodsManagerController {
         return resultDto;
     }
 
-    @ApiOperation("/根据商品名称模糊匹配商品信息")
+    @ApiOperation("/根据商品名称模糊匹配商品信息 - 实现基于肖像的商品优先级排序")
     @GetMapping("/distinctSearchGoods")
     public ResultDto<List<GoodsDO>> distinctSearchGoods(final String distinctParam) {
         if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(distinctParam))) {

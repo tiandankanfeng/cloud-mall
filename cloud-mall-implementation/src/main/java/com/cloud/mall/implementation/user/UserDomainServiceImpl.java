@@ -2,30 +2,34 @@ package com.cloud.mall.implementation.user;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.digest.DigestUtil;
 import com.cloud.mall.domain.workbench.user.model.UserDomainService;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
 import com.cloud.mall.infrastructure.data.dao.msg.MsgRecordWrapper;
+import com.cloud.mall.infrastructure.data.dao.statistics.StatisticsWrapper;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.domain.workbench.file.FileUploadService;
 import com.cloud.mall.infrastructure.dataObject.workbench.msg.MsgCodeEnum;
 import com.cloud.mall.infrastructure.dataObject.workbench.msg.MsgContentProperties;
 import com.cloud.mall.infrastructure.dataObject.workbench.msg.MsgRecordDO;
+import com.cloud.mall.infrastructure.dataObject.workbench.statistics.StatisticsDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
+import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
 import com.cloud.mall.infrastructure.utils.MsgSendUtil;
 import com.cloud.mall.infrastructure.utils.RedisManager;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +52,10 @@ public class UserDomainServiceImpl implements UserDomainService {
     private RedisManager redisManager;
     @Autowired
     private GoodsWrapper goodsWrapper;
+    @Autowired
+    private SimpleFunction simpleFunction;
+    @Autowired
+    private StatisticsWrapper statisticsWrapper;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
@@ -58,7 +66,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         if (CollectionUtil.isNotEmpty(userDOList)) {
             final UserDO userDO = userDOList.get(0);
-            return userDO.getPswd().equals(new String(DigestUtil.md5(pswd, CharsetUtil.UTF_8))) ?
+            return userDO.getPswd().equals(this.simpleFunction.encryptCode().apply(pswd)) ?
                 userDO.getId() : 0L;
         }
         return 0L;
@@ -71,11 +79,10 @@ public class UserDomainServiceImpl implements UserDomainService {
         if (CollectionUtil.isNotEmpty(userDOList)) {
             throw new BizException(BizExceptionProperties.REPEATABLE_ACCOUNT.getMsg());
         }
-        // todo, cloud-function
-        final String encryptPswd = new String(DigestUtil.md5(pswd, CharsetUtil.UTF_8));
+
         final UserDO userDO = new UserDO()
             .setAccount(account)
-            .setPswd(encryptPswd)
+            .setPswd(this.simpleFunction.encryptCode().apply(pswd))
             .setMobile(mobile);
 
         this.doUserAuthentication(userDO);
@@ -134,6 +141,29 @@ public class UserDomainServiceImpl implements UserDomainService {
         }
 
         this.userWrapper.updateUserInfo(userDO);
+    }
+
+    @Override
+    public List<String> updateUserTagsByStatistics(final Long userId) {
+        final UserDO userDO = this.userWrapper.queryByUserId(userId);
+        if (Objects.nonNull(userDO)) {
+            // 获取用户 tag统计信息
+            final List<StatisticsDO> statisticsDOList = this.statisticsWrapper.queryByParamAndOrderByHits(
+                new StatisticsDO().setUserId(userId));
+            final List<String> statisticsTags = statisticsDOList.stream()
+                // 点击数至少大于 1
+                .filter(statisticsDO -> statisticsDO.getHits() > 1L)
+                .map(StatisticsDO::getTag)
+                .collect(Collectors.toList());
+            final String userLatestTags = Joiner.on(",")
+                .join(statisticsTags);
+
+            userDO.setTags(userLatestTags);
+            this.userWrapper.updateUserInfo(userDO);
+
+            return statisticsTags;
+        }
+        return Lists.newArrayList();
     }
 
     private void doUserAuthentication(final UserDO userDO) {
