@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.cloud.mall.infrastructure.data.dao.cates.CatesWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.cate.CatesDO;
@@ -44,13 +45,20 @@ public class CateWrapperImpl implements CatesWrapper {
 
     @Override
     public List<CatesDO> queryAllCate1Entities() {
-        final LambdaQueryWrapper<CatesDO> lambdaWrapper = Wrappers.<CatesDO>lambdaQuery()
-            .groupBy(CatesDO::getCate1Code);
-        return this.catesMapper.selectList(lambdaWrapper);
+        final QueryWrapper<CatesDO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("cate1_code", "cate1_desc")
+            .select("cate1_code", "cate1_desc");
+        return this.catesMapper.selectList(queryWrapper);
     }
 
     @Override
     public void updateCatesInfo(final CatesDO catesDO) {
         this.catesMapper.updateById(catesDO);
+    }
+
+    @Override
+    public List<CatesDO> queryAllCatesInfo() {
+        final LambdaQueryWrapper<CatesDO> lambdaWrapper = Wrappers.<CatesDO>lambdaQuery(null);
+        return this.catesMapper.selectList(lambdaWrapper);
     }
 }

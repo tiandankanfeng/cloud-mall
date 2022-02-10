@@ -3,6 +3,7 @@ package com.cloud.mall.domain.workbench.cates;
 import java.util.List;
 
 import com.cloud.mall.domain.workbench.cates.model.Cate1sVO;
+import com.cloud.mall.domain.workbench.cates.model.CatesVO;
 import com.cloud.mall.infrastructure.dataObject.workbench.cate.CatesDO;
 
 /**
@@ -29,4 +30,10 @@ public interface CatesDomainService {
      * @return
      */
     List<Cate1sVO> showAllCate1sInfo();
+
+    /**
+     * 显示所有类目信息
+     * @return
+     */
+    CatesVO showAllCatesInfo();
 }

@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.cates.CatesDomainService;
 import com.cloud.mall.domain.workbench.cates.model.Cate1sVO;
+import com.cloud.mall.domain.workbench.cates.model.CatesVO;
 import com.cloud.mall.domain.workbench.goods.model.GoodsVO;
 import com.cloud.mall.domain.workbench.goods.GoodsDomainService;
 import com.cloud.mall.domain.workbench.shopping.ShoppingListDomainService;
@@ -131,10 +132,16 @@ public class GoodsManagerController {
         return new ResultDto<>();
     }
 
-    @ApiOperation("显示所有一级类目信息")
+    @ApiOperation("展示所有一级类目信息")
     @GetMapping("/showAllCate1sInfo")
     public ResultDto<Cate1sVO> showAllCate1sInfo() {
         return new ResultDto(this.catesDomainService.showAllCate1sInfo());
+    }
+
+    @ApiOperation("展示所有类目信息")
+    @GetMapping("/showAllCatesInfo")
+    public ResultDto<CatesVO> showAllCatesInfo() {
+        return new ResultDto<>(this.catesDomainService.showAllCatesInfo());
     }
 
 }

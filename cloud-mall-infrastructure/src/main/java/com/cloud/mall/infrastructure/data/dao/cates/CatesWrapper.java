@@ -41,4 +41,10 @@ public interface CatesWrapper {
      * @param catesDO
      */
     void updateCatesInfo(CatesDO catesDO);
+
+    /**
+     * 查询所有类目信息
+     * @return
+     */
+    List<CatesDO> queryAllCatesInfo();
 }
