@@ -1,18 +1,22 @@
 package com.cloud.mall.implementation.goods;
 
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.cloud.mall.domain.workbench.goods.GoodsDomainService;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
+import com.cloud.mall.infrastructure.data.dao.statistics.StatisticsWrapper;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
+import com.cloud.mall.infrastructure.dataObject.workbench.statistics.StatisticsDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
+import com.cloud.mall.infrastructure.tools.function.SimpleFunction;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -31,6 +35,10 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
     private GoodsWrapper goodsWrapper;
     @Autowired
     private UserWrapper userWrapper;
+    @Autowired
+    private StatisticsWrapper statisticsWrapper;
+    @Autowired
+    private SimpleFunction simpleFunction;
 
     @Override
     public void publishGoods(final GoodsDO goodsDO) {
@@ -38,7 +46,8 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
     }
 
     private void doInsertOrUpdateGoodsInfo(final GoodsDO goodsDO) {
-        if (0L != goodsDO.getUserId() && Objects.nonNull(goodsDO)) {
+        if (Objects.nonNull(goodsDO) && this.simpleFunction.validateNumValueLegal().apply(
+            Lists.newArrayList(goodsDO.getUserId()))) {
             this.goodsWrapper.updateGoodsInfoById(goodsDO);
         } else {
             this.goodsWrapper.insertGoodsRecord(goodsDO);
@@ -53,16 +62,48 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
         }
 
         final List<GoodsDO> res = Lists.newArrayList();
+        val limitShowLoad = new HashMap<String, Long>();
+        val hitsSum = new AtomicLong();
         Splitter.on(",")
             .splitToList(userDO.getTags())
             .stream()
             .forEach(tag -> {
-                // 标签匹配商品
-                final List<GoodsDO> goodsDOS = this.goodsWrapper.queryGoodsByTagsFuzzySearch(tag);
-                if (CollectionUtils.isNotEmpty(goodsDOS)) {
-                    res.addAll(goodsDOS);
+                // 获取此标签 hits
+                final List<StatisticsDO> statisticsDOS = this.statisticsWrapper.queryByParamAndOrderByHits(new StatisticsDO()
+                    .setUserId(userId)
+                    .setTag(tag));
+                if (CollectionUtils.isNotEmpty(statisticsDOS)) {
+                    final Long hits = statisticsDOS.get(0).getHits();
+                    hitsSum.updateAndGet(v -> v + hits);
+                    limitShowLoad.put(tag, hits);
                 }
+
             });
+
+        limitShowLoad.forEach((k, v) -> {
+            final double limitLoad = (double)(v / hitsSum.get());
+            final List<GoodsDO> currentTagsGoods = Lists.newArrayList();
+            // 模糊匹配存在匹配不到的情况(因此以 10000为基数底层则是进行 1000的权比进行计算)
+            final List<GoodsDO> goodsDOS = this.goodsWrapper.queryGoodsByTagsFuzzySearch(k, limitLoad);
+
+
+            goodsDOS.stream()
+                .forEach(goodsDO -> {
+                    if (currentTagsGoods.size() >= (int)(1000 * limitLoad)) {
+                        return;
+                    }
+                    final boolean goodsTagsList = Splitter.on(",")
+                        .splitToList(goodsDO.getTags())
+                        .contains(k);
+                    if (goodsTagsList) {
+                        currentTagsGoods.add(goodsDO);
+                    }
+                });
+
+            if (CollectionUtils.isNotEmpty(currentTagsGoods)) {
+                res.addAll(currentTagsGoods);
+            }
+        });
 
         return res;
     }

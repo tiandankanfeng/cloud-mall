@@ -157,7 +157,7 @@ public class UserDomainServiceImpl implements UserDomainService {
                 .collect(Collectors.toList());
             final String userLatestTags = Joiner.on(",")
                 .join(statisticsTags);
-
+            // 用户 tags按照优先级进行排序
             userDO.setTags(userLatestTags);
             this.userWrapper.updateUserInfo(userDO);
 

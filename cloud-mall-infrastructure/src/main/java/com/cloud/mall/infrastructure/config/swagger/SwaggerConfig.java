@@ -30,9 +30,9 @@ public class SwaggerConfig {
     private int port;
 
     @Bean
-    public Docket docket(Environment environment) {
-        System.out.println("swagger bean！");
-        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+    public Docket docket(final Environment environment) {
+        System.out.println("swagger bean load！");
+        return new Docket(DocumentationType.SWAGGER_2).apiInfo(this.apiInfo())
             .groupName("Cloud-Mall")
             .enable(true)
             .select()
@@ -41,7 +41,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("Cloud-Mall", "https://github.com/tiandankanfeng/cloud-mall", "2252578955@qq.com");
+        final Contact contact = new Contact("Cloud-Mall", "https://github.com/tiandankanfeng/cloud-mall", "2252578955@qq.com");
         /**
          * 配置Swagger文件信息
          */
@@ -52,7 +52,7 @@ public class SwaggerConfig {
             "https://liangye-xo.xyz",
             contact,
             "online-doc",
-            StrBuilder.create("http://localhost:").append(port).append("/doc.html").toString(),
+            StrBuilder.create("http://localhost:").append(this.port).append("/doc.html").toString(),
             new ArrayList()
         );
     }

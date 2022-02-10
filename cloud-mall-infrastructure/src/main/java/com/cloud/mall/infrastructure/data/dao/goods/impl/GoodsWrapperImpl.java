@@ -52,9 +52,12 @@ public class GoodsWrapperImpl implements GoodsWrapper {
     }
 
     @Override
-    public List<GoodsDO> queryGoodsByTagsFuzzySearch(final String tag) {
+    public List<GoodsDO> queryGoodsByTagsFuzzySearch(final String tag, final Double limitLoad) {
+        // 默认显示 10000 条
+        final int limits = (int)(10000 * limitLoad);
         final LambdaQueryWrapper<GoodsDO> lambdaWrapper = Wrappers.<GoodsDO>lambdaQuery()
-            .like(GoodsDO::getTags, tag);
+            .like(GoodsDO::getTags, tag)
+            .last("limit " + limits);
         return this.goodsMapper.selectList(lambdaWrapper);
     }
 

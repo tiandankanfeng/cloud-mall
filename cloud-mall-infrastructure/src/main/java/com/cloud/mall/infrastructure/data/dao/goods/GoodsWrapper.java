@@ -46,9 +46,10 @@ public interface GoodsWrapper {
     /**
      * 根据标签模糊匹配商品
      * @param tag
+     * @param limitLoad 标签负载因子
      * @return
      */
-    List<GoodsDO> queryGoodsByTagsFuzzySearch(String tag);
+    List<GoodsDO> queryGoodsByTagsFuzzySearch(String tag, Double limitLoad);
 
     /**
      * 模糊匹配商品信息
