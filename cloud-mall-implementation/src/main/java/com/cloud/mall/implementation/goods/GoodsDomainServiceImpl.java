@@ -105,7 +105,10 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
             }
         });
 
-        return res;
+        // 过滤去重
+        return res.stream()
+            .distinct()
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -125,7 +128,10 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
                 final List<GoodsDO> resOrderedList = goodsDOList.stream()
                     .sorted((s1, s2) -> this.calculateHit(tagsList, s2.getTags()) - this.calculateHit(tagsList,
                         s1.getTags()))
+                    // 去重
+                    .distinct()
                     .collect(Collectors.toList());
+
                 return resOrderedList;
             }
         }

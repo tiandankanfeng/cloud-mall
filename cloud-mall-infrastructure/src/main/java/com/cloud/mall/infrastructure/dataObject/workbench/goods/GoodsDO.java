@@ -69,4 +69,20 @@ public class GoodsDO extends SequenceBaseDO {
      * 商品库存数量
      */
     private Long quantity;
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * 验重
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(final Object o) {
+        final GoodsDO goodsDO = (GoodsDO)o;
+        return this.getId().equals(goodsDO.getId());
+    }
 }
