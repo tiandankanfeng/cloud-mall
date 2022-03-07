@@ -1,5 +1,6 @@
 package com.cloud.mall.infrastructure;
 
+import java.time.Instant;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -53,6 +54,12 @@ class CloudMallInfrastructureApplicationTests {
         } catch (final ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testApiOnInstant() {
+        System.out.println(Instant.now().getEpochSecond());
+        System.out.println(Instant.now().getEpochSecond());
     }
 
 

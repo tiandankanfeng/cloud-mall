@@ -11,6 +11,7 @@
     <artifactId>cloud-mall-infrastructure</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>cloud-mall-infrastructure</name>
+    <packaging>jar</packaging>
     <description>cloud-mall-infrastructure</description>
     <properties>
         <java.version>11</java.version>

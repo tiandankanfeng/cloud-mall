@@ -33,8 +33,8 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         final MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        // 多租户插件
-        interceptor.addInnerInterceptor(new TenantLineInnerInterceptor());
+        //// 多租户插件
+        //interceptor.addInnerInterceptor(new TenantLineInnerInterceptor());
         // 分页插件
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         // 乐观锁插件
