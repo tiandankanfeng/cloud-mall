@@ -5,7 +5,7 @@ prd:https://www.processon.com/view/link/61fe5f9e5653bb06de15ad19
 区分上传至那个仓库.
 基于后期需要和前端伙伴但又懒写 api文档, 因此在项目中集成了 swagger, springfox官方已经支持 starter方式引入了, 并不存在兼容问题仅仅是
 swagger-ui的页面链接发生了更变而已, 官方：https://springfox.github.io/springfox/docs/snapshot/#changes-in-swagger-ui
-knife是对 swagger-ui的再优化版本, 确实对 ui功能做了很大增强，官方: https://doc.xiaominfo.com/knife4j/documentation/, 
+knife是对 swagger-ui的再优化版本, 确实对 ui功能做了很大增强，官方: https://doc.xiaominfo.com/knife4j/documentation/,
 从此 api文档不再愁: http://localhost:8000/doc.html
 
 struct:
@@ -17,9 +17,9 @@ app -> implementation -> infrastructure -> domain
 最后更改：
 app -> implementation -> domain -> infrastructure
 
-把 domain层进行抽取, 但是这么做存在一些纠结点：domain层离不开表实体, 但实体是存在于基础设施层, 
+把 domain层进行抽取, 但是这么做存在一些纠结点：domain层离不开表实体, 但实体是存在于基础设施层,
 实体层存在的地方便是 mybatis-plus归属, 此时只有两种方案：将实体以及 plus依赖存储到领域层, 但领域层
-应该是脱离于基础设施专注于对象模型而存在, 因此我不会这么去做, 
+应该是脱离于基础设施专注于对象模型而存在, 因此我不会这么去做,
 所以更改为了最后一种：更变依赖设施架构层次
 
 
@@ -45,9 +45,40 @@ c. 定时任务实现上述两者
 
 标签应用时机：
 a. 首页展示用户商品信息
-    用户肖像标签优先级排序
-    优先级高的 tag对应商品有限展示, 但考虑到如果项目真正搞起来后商品信息过多的情况, 不可能在首页只去展示一个
-    tag对应的所有商品, 应加以控制， 指定一个数目下进行权重比显示相较而言才是比较靠谱的一种做法.
+用户肖像标签优先级排序
+优先级高的 tag对应商品有限展示, 但考虑到如果项目真正搞起来后商品信息过多的情况, 不可能在首页只去展示一个
+tag对应的所有商品, 应加以控制， 指定一个数目下进行权重比显示相较而言才是比较靠谱的一种做法.
 b. 用户进行搜索时对搜索到的商品进行优先级排序.
 
 规范下返回：ResultDto
+
+监控方面：
+1.引入了 `druid`对数据源进行管理并且实时监控慢 sql
+2.引入了 `arthas`对 Java程序进行监控
+
+```shell
+[INFO] arthas-boot version: 3.5.5
+[INFO] Process 3014072 already using port 3658
+[INFO] Process 3014072 already using port 8563
+[INFO] Found existing java process, please choose one and input the serial number of the process, eg : 1. Then hit ENTER.
+* [1]: 3014072 cloud-mall-app-1.0.0-SNAPSHOT.jar
+  [2]: 4113391 arthas-boot.jar
+  [3]: 164410 xxl-job-admin-2.3.1-SNAPSHOT.jar
+  1
+  [INFO] arthas home: /root/.arthas/lib/3.5.6/arthas
+  [INFO] The target process already listen port 3658, skip attach.
+  [INFO] arthas-client connect 127.0.0.1 3658
+  ,---.  ,------. ,--------.,--.  ,--.  ,---.   ,---.
+  /  O  \ |  .--. ''--.  .--'|  '--'  | /  O  \ '   .-'
+  |  .-.  ||  '--'.'   |  |   |  .--.  ||  .-.  |`.  `-.
+  |  | |  ||  |\  \    |  |   |  |  |  ||  | |  |.-'    |
+  `--' `--'`--' '--'   `--'   `--'  `--'`--' `--'`-----'
+
+wiki       https://arthas.aliyun.com/doc
+tutorials  https://arthas.aliyun.com/doc/arthas-tutorials.html
+version    3.5.6
+main_class
+pid        3014072
+time       2022-03-11 11:29:35
+```
+
