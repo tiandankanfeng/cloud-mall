@@ -31,7 +31,7 @@ Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存
 
 使用 `spring-cloud-function`函数式编写工具方法, 抽取重复功能代码以及优化程序性能
 
-后期将启用 ZGC.
+已启用 ZGC
 
 分布式任务调度器选型：xxx-job, url:`http://sky.liangye-xo.xyz:8050/xxl-job-admin/`
 也有基于 redis实现了下单机下的调度, 若区使用需保证幂等消费
