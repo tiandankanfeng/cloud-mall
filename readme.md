@@ -31,7 +31,17 @@ Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存
 
 使用 `spring-cloud-function`函数式编写工具方法, 抽取重复功能代码以及优化程序性能
 
-已启用 ZGC
+已启用 ZGC：
+```shell
+[root@VM-12-8-centos workplace]# jinfo -flags 535139
+VM Flags:
+-XX:CICompilerCount=2 -XX:+FlightRecorder -XX:InitialHeapSize=31457280 
+-XX:MaxHeapSize=10737418240 -XX:MinHeapDeltaBytes=2097152 -XX:MinHeapSize=8388608 
+-XX:NonNMethodCodeHeapSize=5826188 -XX:NonProfiledCodeHeapSize=122916026 -XX:ProfiledCodeHeapSize=122916026 
+-XX:ReservedCodeCacheSize=251658240 -XX:+SegmentedCodeCache -XX:SoftMaxHeapSize=10737418240 
+-XX:StartFlightRecording=dumponexit=false -XX:+UnlockExperimentalVMOptions -XX:+UseCompressedClassPointers 
+-XX:-UseCompressedOops -XX:+UseZGC
+```
 
 分布式任务调度器选型：xxx-job, url:`http://sky.liangye-xo.xyz:8050/xxl-job-admin/`
 也有基于 redis实现了下单机下的调度, 若区使用需保证幂等消费
