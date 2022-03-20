@@ -27,7 +27,8 @@ public enum BizExceptionProperties {
     MSG_CODE_VALIDATE_NOT_PASS("手机号码校验不通过"),
     GRAPH_CAPTCHA_VALIDATE_NOT_PASS("图形验证码验证不通过"),
     ACCOUNT_NOT_ALLOW_MODIFY("用户账户不允许更改!"),
-    SHOPPING_MAXIMUM_ARRIVED("购物车数量已满!");
+    SHOPPING_MAXIMUM_ARRIVED("购物车数量已满!"),
+    METHOD_ARE_NOT_ALLOWED_ACCESS("方法暂时不允许访问");
 
     private final String msg;
 

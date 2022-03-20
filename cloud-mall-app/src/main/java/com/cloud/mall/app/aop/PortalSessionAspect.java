@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 
 import cn.hutool.core.util.StrUtil;
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
+import com.cloud.mall.app.config.AopConstants.AopOrderConstants;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserIdentityEnum;
@@ -25,6 +26,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -38,6 +40,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Aspect
 @Component
 @Slf4j
+@Order(AopOrderConstants.PORTAL_SESSION_ASPECT)
 public class PortalSessionAspect {
 
     @Autowired
