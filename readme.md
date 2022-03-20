@@ -32,6 +32,7 @@ Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存
 使用 `spring-cloud-function`函数式编写工具方法, 抽取重复功能代码以及优化程序性能
 
 已启用 ZGC：
+`nohup java -jar -XX:StartFlightRecording -XX:+UseZGC -Xmx2g  cloud-mall-app-1.0.0-SNAPSHOT.jar &`
 ```shell
 [root@VM-12-8-centos workplace]# jinfo -flags 535139
 VM Flags:
@@ -45,6 +46,15 @@ VM Flags:
 
 分布式任务调度器选型：xxx-job, url:`http://sky.liangye-xo.xyz:8050/xxl-job-admin/`
 也有基于 redis实现了下单机下的调度, 若区使用需保证幂等消费
+
+mysql:8.0
+权限审批流：Yearning
+link: http://sky.liangye-xo.xyz:10010/#/login
+用户名: yuandao
+密码:Wu913428!
+
+./Yearning run --push "sky.liangye-xo.xyz" -port "8888"
+./Yearning -s -b "sky.liangye-xo.xyz" -p "8888"
 
 如何做到用户肖像的构建? 肖像, 并非就是一幅画, 其实就是对用户进行标识, 通过标识我们能够知道此用户感兴趣的商品是什么?
 因此关键在于肖像的构建, 本文使用标签的形式完成用户肖像的构建
@@ -65,6 +75,7 @@ b. 用户进行搜索时对搜索到的商品进行优先级排序.
 监控方面：
 1.引入了 `druid`对数据源进行管理并且实时监控慢 sql
 2.引入了 `arthas`对 Java程序进行监控
+3.todo - 基于 RateLimiter实现网关层面的监控.
 
 ```shell
 [INFO] arthas-boot version: 3.5.5
@@ -91,4 +102,52 @@ main_class
 pid        3014072
 time       2022-03-11 11:29:35
 ```
+
+基于 boot引入 Nacos: http://sky.liangye-xo.xyz:8848/nacos/
+
+前端仓库：`https://gitee.com/jay0722/fgt-system/tree/master/vue-element-admin-master/src/views`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

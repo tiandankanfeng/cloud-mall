@@ -11,6 +11,7 @@ import com.cloud.mall.infrastructure.dataObject.workbench.msg.MsgCodeEnum;
 import com.cloud.mall.infrastructure.utils.MsgSendUtil;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.assertj.core.internal.Dates;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -23,6 +24,7 @@ class CloudMallInfrastructureApplicationTests {
     void contextLoads() {
     }
 
+    //@Benchmark // 告知 jmh在 `mvn package`时生成此方法的基准测试代码
     @Test
     public void testDbOnEncrypt() throws Exception {
         System.out.println("hello world");
@@ -44,7 +46,7 @@ class CloudMallInfrastructureApplicationTests {
 
     @Test
     public void testMsgSend() {
-        final Future<MsgCodeEnum> future = MsgSendUtil.sendMsg("19855143393", "good night!");
+        final Future<MsgCodeEnum> future = MsgSendUtil.sendMsg("19855143393", "good night! airpods pro now!");
         try {
             // doSomething
             final MsgCodeEnum msgCodeEnum = future.get();
@@ -62,5 +64,9 @@ class CloudMallInfrastructureApplicationTests {
         System.out.println(Instant.now().getEpochSecond());
     }
 
+    @Test
+    public void testDateTransfer() {
+        //Dates.parse
+    }
 
 }
