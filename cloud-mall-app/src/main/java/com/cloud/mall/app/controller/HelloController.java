@@ -1,7 +1,9 @@
 package com.cloud.mall.app.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import com.cloud.mall.app.aop.annotaion.PortalInjectionAnnotation;
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.hello.HelloService;
 import com.cloud.mall.infrastructure.data.dao.client.ClientWrapper;
@@ -44,6 +46,7 @@ public class HelloController {
      */
     @ApiOperation("测试数据库连接")
     @GetMapping("/getAllClient")
+    @PortalInjectionAnnotation(timeUnit = TimeUnit.MINUTES, touchLimiting = 2L)
     public ResultDto<List<ClientDO>> getAllData() {
         return new ResultDto<>(this.clientWrapper.queryAllData());
     }

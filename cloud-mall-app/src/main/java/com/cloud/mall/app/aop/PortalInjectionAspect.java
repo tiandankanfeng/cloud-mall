@@ -46,25 +46,24 @@ public class PortalInjectionAspect {
         final MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         final PortalInjectionAnnotation portalInjectionAnnotation = methodSignature.getMethod().getAnnotation(
             PortalInjectionAnnotation.class);
-        PortalInjectionAspect.limitMap.get(methodSignature.getMethod());
+        RateLimiter rateLimiter = PortalInjectionAspect.limitMap.get(methodSignature.getMethod());
 
         // lazy init
-        if (Objects.isNull(methodSignature.getMethod())) {
+        if (Objects.isNull(rateLimiter)) {
             // Guava rateLimiter
-            final RateLimiter rateLimiter = RateLimiter.create(portalInjectionAnnotation.touchLimiting(), 3L,
+            rateLimiter = RateLimiter.create(portalInjectionAnnotation.touchLimiting(), 3L,
                 portalInjectionAnnotation.timeUnit());
             PortalInjectionAspect.limitMap.put(methodSignature.getMethod(), rateLimiter);
         }
 
-        final RateLimiter rateLimiter = PortalInjectionAspect.limitMap.get(methodSignature.getMethod());
         // try lock
         try {
             if (rateLimiter.tryAcquire()) {
                 return joinPoint.proceed();
             }
-            return new BizException(BizExceptionProperties.METHOD_ARE_NOT_ALLOWED_ACCESS.getMsg());
+            throw new BizException(BizExceptionProperties.METHOD_ARE_NOT_ALLOWED_ACCESS.getMsg());
         } catch (final Throwable e) {
-            PortalInjectionAspect.log.warn("method:{} happens exception:{}", methodSignature.getMethod(), e.getMessage());
+            PortalInjectionAspect.log.warn("method:{} happens exception:{}", methodSignature.getMethod(), e);
             // let outer aspect solve exp
             throw e;
         }
