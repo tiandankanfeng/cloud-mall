@@ -48,7 +48,7 @@ public class LoginAndRegistryController {
     @Autowired
     private UserWrapper userWrapper;
 
-    @ApiOperation("用户认证")
+    @ApiOperation("用户密码认证")
     @GetMapping("/authentication")
     public ResultDto<Long> validateUserLogin(@RequestParam("account") final String account,
         @RequestParam("pswd") final String pswd,
@@ -66,6 +66,29 @@ public class LoginAndRegistryController {
         }
 
         return new ResultDto<>(this.userDomainService.authenticationUserLogin(account, pswd));
+    }
+
+    @ApiOperation("用户短信验证")
+    @GetMapping("/validateUserLoginByMobile")
+    public ResultDto<Long> validateUserLoginByMobile(@RequestParam("mobile") final String mobile,
+        @RequestParam("validateMsgCode") final String validateMsgCode) {
+        if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(mobile, validateMsgCode))) {
+            throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
+        }
+
+        // 获取账户信息
+        final List<UserDO> userDOS = this.userWrapper.queryByUserParam(new UserDO().setMobile(mobile));
+        if (CollectionUtils.isEmpty(userDOS)) {
+            throw new BizException(BizExceptionProperties.MOBILE_DO_NOT_BIND_ANY_USER.getMsg());
+        }
+
+        final String account = userDOS.get(0).getAccount();
+        // 验证
+        if (!this.userDomainService.validateMobileMsgCode(account, validateMsgCode)) {
+            throw new BizException(BizExceptionProperties.MOBILE_MSG_NOT_PASS.getMsg());
+        }
+
+        return new ResultDto<>(userDOS.get(0).getId());
     }
 
     @ApiOperation("用户注册")

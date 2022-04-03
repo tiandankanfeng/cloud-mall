@@ -35,4 +35,11 @@ public class ResultDto<T> {
     public ResultDto(final T data) {
         this.data = data;
     }
+
+    //public static ResultDto success(final T data) {
+    //    ResultDto<T> resultDto = new ResultDto<>();
+    //    resultDto.setSuccess(Boolean.TRUE);
+    //    resultDto.setData(data);
+    //    return resultDto;
+    //}
 }

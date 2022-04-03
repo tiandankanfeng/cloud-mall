@@ -48,6 +48,14 @@ public interface UserDomainService {
     Boolean userBindMobile(String account, String mobile);
 
     /**
+     * 用户验证手机号码
+     * @param account
+     * @param msgCode
+     * @return
+     */
+    Boolean validateMobileMsgCode(String account, String msgCode);
+
+    /**
      * 更新用户信息
      * @param userDO
      */

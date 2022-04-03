@@ -134,6 +134,15 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
+    public Boolean validateMobileMsgCode(final String account, final String msgCode) {
+        final String msgKey = Joiner.on("-")
+            .skipNulls()
+            .join(Lists.newArrayList(account, "registry", "msgCode"));
+        final String cacheCode = String.valueOf(this.redisManager.get(msgKey));
+        return msgCode.equals(cacheCode);
+    }
+
+    @Override
     public void updateUserInfo(final UserDO userDO) {
         final String userNick = SessionUtil.currentSession().getUserNick();
         if (!userNick.equals(userDO.getAccount())) {

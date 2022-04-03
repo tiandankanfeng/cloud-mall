@@ -10,5 +10,5 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MsgContentProperties {
 
-    public String USER_BIND_MOBILE = "[Cloud-Mall Java 测试]尊敬的用户 {} 你好, 手机验证码为:{}, 请不要向他人泄露此验证码!";
+    public String USER_BIND_MOBILE = "[Cloud-Mall 良夜的博客 Java 测试]尊敬的用户 {} 你好, 手机验证码为:{}, 请不要向他人泄露此验证码!";
 }

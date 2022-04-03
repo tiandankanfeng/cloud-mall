@@ -40,7 +40,8 @@ public class UserManagerController {
     @ApiOperation("用户上传头像")
     @PortalSessionAnnotation
     @PostMapping("/headImgUpload")
-    public ResultDto<String> uploadHeadImg(@RequestParam(value = "file", defaultValue = "null") final MultipartFile file) {
+    public ResultDto<String> uploadHeadImg(
+        @RequestParam(value = "file", defaultValue = "null") final MultipartFile file) {
         try {
             final Long userId = SessionUtil.currentSession().getUserId();
             System.out.println("userId:" + userId);
@@ -52,14 +53,14 @@ public class UserManagerController {
 
     @ApiOperation("用户绑定手机号码")
     @GetMapping("/userBindMobile")
-    public ResultDto<Boolean> bindMobileToUser(final String account, final String mobile) {
+    public ResultDto<Boolean> bindMobileToUser(@RequestParam("account") final String account,
+        @RequestParam("mobile") final String mobile) {
         if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, mobile))) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
 
         return new ResultDto<>(this.userDomainService.userBindMobile(account, mobile));
     }
-
 
     @ApiOperation("自主更新用户信息")
     @PostMapping("/updateUserInfo")

@@ -71,7 +71,7 @@ public class MsgSendUtil {
 
             // 获取返回相关信息  --> 判断状态码
             final int statusCode = post.getStatusCode();
-            MsgSendUtil.log.info("message send, phone:{}, statusCode:{}", receivePhoneNumber, statusCode);
+            MsgSendUtil.log.info("[良夜的博客, 测试]message send, phone:{}, statusCode:{}", receivePhoneNumber, statusCode);
 
             post.releaseConnection(); // 非群发消息
             return MsgCodeEnum.getMsgEnumByCode(statusCode);

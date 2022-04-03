@@ -21,6 +21,7 @@ public enum BizExceptionProperties {
     UNKNOWN_SERVER_ERROR("服务端异常"),
     REPEATABLE_ACCOUNT("用户名重复, 请更换一个新的名称再进行此操作!"),
     CAPTCHA_VALIDATE_NOT_PASS("验证码验证不通过或者已过期!"),
+    MOBILE_MSG_NOT_PASS("手机号码验证不通过或者已过期"),
     FILE_UPLOAD_FAILED("文件上传失败!"),
     FILE_NOT_MEET_REQUIREMENT("上传的文件不符合要求"),
     METHOD_INVOKE_SUCCESS("方法请求成功!"),
@@ -28,7 +29,8 @@ public enum BizExceptionProperties {
     GRAPH_CAPTCHA_VALIDATE_NOT_PASS("图形验证码验证不通过"),
     ACCOUNT_NOT_ALLOW_MODIFY("用户账户不允许更改!"),
     SHOPPING_MAXIMUM_ARRIVED("购物车数量已满!"),
-    METHOD_ARE_NOT_ALLOWED_ACCESS("方法暂时不允许访问");
+    METHOD_ARE_NOT_ALLOWED_ACCESS("方法暂时不允许访问"),
+    MOBILE_DO_NOT_BIND_ANY_USER("该手机号码暂未绑定任何用户");
 
     private final String msg;
 
