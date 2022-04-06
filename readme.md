@@ -1,4 +1,4 @@
-Cloud-Mall:基于用户肖像的电商系统
+ Cloud-Mall:基于用户肖像的电商系统
 prd:https://www.processon.com/view/link/61fe5f9e5653bb06de15ad19
 
 远程仓库已整合完毕, 个人信息凭证存放到本地 setting.xml, deploy时将通过 SNAPSHOT以及 RELEASE

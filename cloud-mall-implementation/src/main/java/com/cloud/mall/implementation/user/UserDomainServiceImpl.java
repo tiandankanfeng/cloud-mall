@@ -73,7 +73,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public Long userAuthentication(final String account, final String pswd, final String mobile) {
+    public Long userAuthentication(final String account, final String pswd) {
         // 验重
         final List<UserDO> userDOList = this.userWrapper.queryByUserParam(new UserDO().setAccount(account));
         if (CollectionUtil.isNotEmpty(userDOList)) {
@@ -82,8 +82,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         final UserDO userDO = new UserDO()
             .setAccount(account)
-            .setPswd(this.simpleFunction.encryptCode().apply(pswd))
-            .setMobile(mobile);
+            .setPswd(this.simpleFunction.encryptCode().apply(pswd));
 
         this.doUserAuthentication(userDO);
         // 返回标识
@@ -178,7 +177,6 @@ public class UserDomainServiceImpl implements UserDomainService {
     private void doUserAuthentication(final UserDO userDO) {
         userDO.setModifiedNick(userDO.getAccount());
         userDO.setCreateNick(userDO.getAccount());
-
         this.userWrapper.insertUserRecord(userDO);
     }
 

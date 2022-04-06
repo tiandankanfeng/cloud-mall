@@ -95,8 +95,8 @@ public class LoginAndRegistryController {
     @GetMapping("/registry")
     public ResultDto<Long> registerUserAndAuthentication(@RequestParam("account") final String account,
         @RequestParam("pswd") final String pswd,
-        @RequestParam("msgCode") final String msgCode) {
-        if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd, msgCode))) {
+        @RequestParam("captcha") final String captcha) {
+        if (!this.simpleFunction.validateParamNotBlank().apply(Lists.newArrayList(account, pswd, captcha))) {
             throw new BizException(BizExceptionProperties.PARAM_VALIDATE_NOT_PASS.getMsg());
         }
         // 验重账户
@@ -104,14 +104,14 @@ public class LoginAndRegistryController {
 
         final String msgKey = Joiner.on("-")
             .skipNulls()
-            .join(Lists.newArrayList(account, "registry", "msgCode"));
-        final String msgCacheCode = String.valueOf(this.redisManager.get(msgKey));
+            .join(Lists.newArrayList(account, "registry", "captcha"));
+        final String captchaCacheCode = String.valueOf(this.redisManager.get(msgKey));
 
-        if (StrUtil.isBlank(msgCacheCode) || !msgCacheCode.equals(msgCode)) {
+        if (StrUtil.isBlank(captchaCacheCode) || !captchaCacheCode.equals(captcha)) {
             throw new BizException(BizExceptionProperties.GRAPH_CAPTCHA_VALIDATE_NOT_PASS.getMsg());
         }
 
-        return new ResultDto<>(this.userDomainService.userAuthentication(account, pswd, msgCacheCode));
+        return new ResultDto<>(this.userDomainService.userAuthentication(account, pswd));
     }
 
     private ResultDto<Void> validateUserAccountDistinct(final String account) {

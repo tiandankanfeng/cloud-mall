@@ -25,10 +25,9 @@ public interface UserDomainService {
      * 用户进行登陆认证
      * @param account
      * @param pswd
-     * @param mobile
      * @return
      */
-    Long userAuthentication(String account, String pswd, String mobile);
+    Long userAuthentication(String account, String pswd);
 
     /**
      * 用户上传、更新头像
