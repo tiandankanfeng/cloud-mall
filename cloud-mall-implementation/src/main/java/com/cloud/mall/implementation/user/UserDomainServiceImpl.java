@@ -1,8 +1,12 @@
 package com.cloud.mall.implementation.user;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
@@ -11,7 +15,12 @@ import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.domain.workbench.cates.CatesDomainService;
+import com.cloud.mall.domain.workbench.cates.model.Cate1sVO;
+import com.cloud.mall.domain.workbench.cates.model.Cate2sVO;
+import com.cloud.mall.domain.workbench.cates.model.CatesVO;
+import com.cloud.mall.domain.workbench.user.UserDomainService;
+import com.cloud.mall.domain.workbench.user.model.UserHitsVo;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
 import com.cloud.mall.infrastructure.data.dao.msg.MsgRecordWrapper;
 import com.cloud.mall.infrastructure.data.dao.statistics.StatisticsWrapper;
@@ -29,7 +38,6 @@ import com.cloud.mall.infrastructure.utils.MsgSendUtil;
 import com.cloud.mall.infrastructure.utils.RedisManager;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +64,8 @@ public class UserDomainServiceImpl implements UserDomainService {
     private SimpleFunction simpleFunction;
     @Autowired
     private StatisticsWrapper statisticsWrapper;
+    @Autowired
+    private CatesDomainService catesDomainService;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
@@ -172,6 +182,40 @@ public class UserDomainServiceImpl implements UserDomainService {
             return statisticsTags;
         }
         return Lists.newArrayList();
+    }
+
+    @Override
+    public UserHitsVo getUserRecentlyHits(final Long userId) {
+        final List<StatisticsDO> statisticsDOS = this.statisticsWrapper.queryByUserId(userId);
+        final CatesVO catesVO = new CatesVO();
+        final HashMap catesMap = new HashMap<Cate1sVO, List<Cate2sVO>>();
+        final UserHitsVo userHitsVo = new UserHitsVo();
+        statisticsDOS.stream()
+            .forEach(statisticsDO -> {
+                // 二级类目 id
+                final Long cate2Code = statisticsDO.getCate2Code();
+                Optional.of(this.catesDomainService.upperFindCate1ByCate2(cate2Code))
+                    .ifPresent(catesDO -> {
+                        final Cate1sVO cate1sVO = Cate1sVO.builder()
+                            .cate1_code(catesDO.getCate1Code())
+                            .cate1_desc(catesDO.getCate1Desc())
+                            .build();
+                        List<Cate2sVO> cate2sVOS = (List<Cate2sVO>)catesMap.get(cate1sVO);
+                        if (CollectionUtil.isEmpty(cate2sVOS)) {
+                            cate2sVOS = Lists.newArrayList();
+                        }
+                        cate2sVOS.add(Cate2sVO.builder()
+                            .cate2_code(catesDO.getCate2Code())
+                            .cate2_desc(catesDO.getCate2Desc())
+                            .hits(statisticsDO.getHits())
+                            .build());
+                        catesMap.put(cate1sVO, cate2sVOS);
+                    });
+            });
+        // fill
+        catesVO.setCatesVO(catesMap);
+        userHitsVo.setCatesVO(catesVO);
+        return userHitsVo;
     }
 
     private void doUserAuthentication(final UserDO userDO) {

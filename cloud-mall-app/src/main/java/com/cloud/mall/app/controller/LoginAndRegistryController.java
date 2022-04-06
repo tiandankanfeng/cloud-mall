@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.domain.workbench.user.UserDomainService;
 import com.cloud.mall.infrastructure.data.dao.user.UserWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.result.ResultDto;

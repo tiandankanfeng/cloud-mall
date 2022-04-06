@@ -1,8 +1,9 @@
-package com.cloud.mall.domain.workbench.user.model;
+package com.cloud.mall.domain.workbench.user;
 
 import java.io.IOException;
 import java.util.List;
 
+import com.cloud.mall.domain.workbench.user.model.UserHitsVo;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,5 +69,12 @@ public interface UserDomainService {
      * @return
      */
     List<String> updateUserTagsByStatistics(Long userId);
+
+    /**
+     * 显示用户身上
+     * @param userId
+     * @return
+     */
+    UserHitsVo getUserRecentlyHits(Long userId);
 
 }

@@ -36,4 +36,11 @@ public interface CatesDomainService {
      * @return
      */
     CatesVO showAllCatesInfo();
+
+    /**
+     * 二级类目向上匹配
+     * @param cate2
+     * @return
+     */
+    CatesDO upperFindCate1ByCate2(Long cate2);
 }

@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
-import com.cloud.mall.domain.workbench.user.model.UserDomainService;
+import com.cloud.mall.domain.workbench.statistics.StatisticsDomainService;
+import com.cloud.mall.domain.workbench.user.UserDomainService;
+import com.cloud.mall.domain.workbench.user.model.UserHitsVo;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
+import com.cloud.mall.infrastructure.dataObject.workbench.user.UserIdentityEnum;
 import com.cloud.mall.infrastructure.result.ResultDto;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
@@ -36,6 +39,8 @@ public class UserManagerController {
     private UserDomainService userDomainService;
     @Autowired
     private SimpleFunction simpleFunction;
+    @Autowired
+    private StatisticsDomainService statisticsDomainService;
 
     @ApiOperation("用户上传头像")
     @PortalSessionAnnotation
@@ -72,6 +77,22 @@ public class UserManagerController {
 
         this.userDomainService.updateUserInfo(userDO);
         return new ResultDto<>();
+    }
+
+    @ApiOperation("获取用户点击比例图")
+    @GetMapping("/getUserRecentlyHits")
+    @PortalSessionAnnotation
+    public ResultDto<UserHitsVo> getUserRecentlyHits() {
+        final Long userId = SessionUtil.currentSession().getUserId();
+        return new ResultDto<>(this.userDomainService.getUserRecentlyHits(userId));
+    }
+
+    @ApiOperation("返回用户标识")
+    @GetMapping("/getUserIdentity")
+    @PortalSessionAnnotation
+    public ResultDto<String> getUserIdentity() {
+        final UserIdentityEnum userIdentityEnum = SessionUtil.currentSession().getUserIdentityEnum();
+        return new ResultDto<>(userIdentityEnum.getDesc());
     }
 
 }

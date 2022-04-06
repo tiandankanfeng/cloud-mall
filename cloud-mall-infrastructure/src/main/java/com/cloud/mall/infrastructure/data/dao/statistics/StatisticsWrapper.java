@@ -29,4 +29,11 @@ public interface StatisticsWrapper {
      * @return
      */
     List<StatisticsDO> queryByParamAndOrderByHits(StatisticsDO statisticsParam);
+
+    /**
+     * 获取指定用户统计信息
+     * @param userId
+     * @return
+     */
+    List<StatisticsDO> queryByUserId(Long userId);
 }

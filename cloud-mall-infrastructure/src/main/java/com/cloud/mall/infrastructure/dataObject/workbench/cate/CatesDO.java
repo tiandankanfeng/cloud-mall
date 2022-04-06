@@ -3,6 +3,7 @@ package com.cloud.mall.infrastructure.dataObject.workbench.cate;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cloud.mall.infrastructure.dataObject.SequenceBaseDO;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @Author: 夜痕
@@ -10,6 +11,7 @@ import lombok.Data;
  * @Description: 类目事实枚举表
  */
 @Data
+@Accessors(chain = true)
 @TableName("cates")
 public class CatesDO extends SequenceBaseDO {
     private static final long serialVersionUID = -6813932352483789282L;

@@ -44,4 +44,11 @@ public class StatisticsWrapperImpl implements StatisticsWrapper {
             .orderByDesc(StatisticsDO::getHits);
         return this.statisticsMapper.selectList(lambdaQuery);
     }
+
+    @Override
+    public List<StatisticsDO> queryByUserId(final Long userId) {
+        final LambdaQueryWrapper<StatisticsDO> lambdaWrapper = Wrappers.<StatisticsDO>lambdaQuery()
+            .eq(StatisticsDO::getUserId, userId);
+        return this.statisticsMapper.selectList(lambdaWrapper);
+    }
 }

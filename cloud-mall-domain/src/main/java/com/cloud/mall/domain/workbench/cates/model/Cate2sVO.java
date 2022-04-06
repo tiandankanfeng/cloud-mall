@@ -19,4 +19,8 @@ public class Cate2sVO {
     private String cate2_code;
 
     private String cate2_desc;
+    /**
+     * 对应二级类目点击次数
+     */
+    private Long hits;
 }

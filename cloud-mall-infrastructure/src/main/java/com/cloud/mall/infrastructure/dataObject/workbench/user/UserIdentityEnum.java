@@ -18,4 +18,12 @@ public enum UserIdentityEnum {
         this.code = code;
         this.desc = desc;
     }
+
+    public Integer getCode() {
+        return this.code;
+    }
+
+    public String getDesc() {
+        return this.desc;
+    }
 }

@@ -89,4 +89,10 @@ public class CatesDomainServiceImpl implements CatesDomainService {
             .build();
 
     }
+
+    @Override
+    public CatesDO upperFindCate1ByCate2(final Long cate2) {
+        final List<CatesDO> catesDOS = this.catesWrapper.queryByParam(new CatesDO().setCate2Code(String.valueOf(cate2)));
+        return CollectionUtils.isEmpty(catesDOS) ? null : catesDOS.get(0);
+    }
 }
