@@ -73,9 +73,11 @@ public class PortalSessionAspect {
          */
         Long userId = 0L;
         String userNick = null;
-        for (final Cookie cookie : cookies) {
-            userId = cookie.getName().equals("userId") ? Long.valueOf(cookie.getValue()) : userId;
-            userNick = cookie.getName().equals("userNick") ? cookie.getValue() : userNick;
+        if (Objects.nonNull(cookies)) {
+            for (final Cookie cookie : cookies) {
+                userId = cookie.getName().equals("userId") ? Long.valueOf(cookie.getValue()) : userId;
+                userNick = cookie.getName().equals("userNick") ? cookie.getValue() : userNick;
+            }
         }
 
         ResultDto proceed = null;
