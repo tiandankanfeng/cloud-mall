@@ -21,6 +21,7 @@ public class CrosConfig {
                 registry.addMapping("/**")
                     .allowedOrigins("*")
                     .allowedMethods("*");
+
             }
         };
     }
