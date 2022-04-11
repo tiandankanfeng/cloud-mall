@@ -14,10 +14,10 @@ import lombok.Data;
 public class TagsDO extends SequenceBaseDO {
     private static final long serialVersionUID = 3988486469086588351L;
 
-    private String tag;
+    private Integer TagType;
 
     /**
      * 标签相关描述
      */
-    private String desc;
+    private String description;
 }
