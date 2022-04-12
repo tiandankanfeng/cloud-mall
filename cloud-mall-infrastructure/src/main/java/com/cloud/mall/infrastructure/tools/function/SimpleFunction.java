@@ -27,7 +27,7 @@ public class SimpleFunction {
     @Bean
     public Function<List<Long>, Boolean> validateNumValueLegal() {
         return params -> !params.stream()
-            .anyMatch(param -> param == 0L || Objects.isNull(param));
+            .anyMatch(param -> Objects.isNull(param) || param == 0L);
     }
 
     @Bean

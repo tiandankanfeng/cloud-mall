@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
 import com.cloud.mall.infrastructure.mapper.GoodsMapper;
+import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class GoodsWrapperImpl implements GoodsWrapper {
 
     @Override
     public void insertGoodsRecord(final GoodsDO goodsEntity) {
+        goodsEntity.setUserId(SessionUtil.currentSession().getUserId());
         this.goodsMapper.insert(goodsEntity);
     }
 
@@ -32,7 +34,6 @@ public class GoodsWrapperImpl implements GoodsWrapper {
         if (Objects.isNull(goodsEntity)) {
             return;
         }
-
         this.goodsMapper.updateById(goodsEntity);
     }
 
@@ -56,7 +57,7 @@ public class GoodsWrapperImpl implements GoodsWrapper {
         // 默认显示 10000 条
         final int limits = (int)(10000 * limitLoad);
         final LambdaQueryWrapper<GoodsDO> lambdaWrapper = Wrappers.<GoodsDO>lambdaQuery()
-            .like(GoodsDO::getTags, tag)
+            .like(GoodsDO::getTags, '%' + tag + '%')
             .last("limit " + limits);
         return this.goodsMapper.selectList(lambdaWrapper);
     }

@@ -19,4 +19,6 @@ public class Cate1sVO {
     private String cate1_code;
 
     private String cate1_desc;
+
+    private Long hits;
 }

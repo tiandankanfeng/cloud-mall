@@ -1,16 +1,17 @@
 package com.cloud.mall.implementation.user;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollectionUtil;
@@ -212,9 +213,32 @@ public class UserDomainServiceImpl implements UserDomainService {
                         catesMap.put(cate1sVO, cate2sVOS);
                     });
             });
+
+        // 更新一级类目总点击量
+        final HashMap resMap = new HashMap<Cate1sVO, List<Cate2sVO>>();
+        final Set<Entry<Cate1sVO, List<Cate2sVO>>> sets = catesMap.entrySet();
+        for (final Entry<Cate1sVO, List<Cate2sVO>> entry : sets) {
+            final Cate1sVO cate1sVO = entry.getKey();
+            final Cate1sVO vo = Cate1sVO.builder()
+                .cate1_code(cate1sVO.getCate1_code())
+                .cate1_desc(cate1sVO.getCate1_desc())
+                .build();
+            final AtomicLong total = new AtomicLong();
+            entry.getValue().stream()
+                .forEach(cate2sVO -> {
+                    total.addAndGet(cate2sVO.getHits());
+                });
+                // update
+                vo.setHits(total.get());
+                resMap.put(vo, entry.getValue());
+        };
+
         // fill
-        catesVO.setCatesVO(catesMap);
+        catesVO.setCatesVO(resMap);
         userHitsVo.setCatesVO(catesVO);
+        // 用户标识
+        userHitsVo.setUserId(userId);
+        userHitsVo.setUserNick(SessionUtil.currentSession().getUserNick());
         return userHitsVo;
     }
 

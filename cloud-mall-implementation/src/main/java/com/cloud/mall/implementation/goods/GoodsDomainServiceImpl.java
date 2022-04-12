@@ -47,7 +47,7 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
 
     private void doInsertOrUpdateGoodsInfo(final GoodsDO goodsDO) {
         if (Objects.nonNull(goodsDO) && this.simpleFunction.validateNumValueLegal().apply(
-            Lists.newArrayList(goodsDO.getUserId()))) {
+            Lists.newArrayList(goodsDO.getId()))) {
             this.goodsWrapper.updateGoodsInfoById(goodsDO);
         } else {
             this.goodsWrapper.insertGoodsRecord(goodsDO);
@@ -72,16 +72,19 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
                 final List<StatisticsDO> statisticsDOS = this.statisticsWrapper.queryByParamAndOrderByHits(new StatisticsDO()
                     .setUserId(userId)
                     .setTag(tag));
-                if (CollectionUtils.isNotEmpty(statisticsDOS)) {
-                    final Long hits = statisticsDOS.get(0).getHits();
-                    hitsSum.updateAndGet(v -> v + hits);
-                    limitShowLoad.put(tag, hits);
-                }
+
+                statisticsDOS.stream()
+                    .forEach(statisticsDO -> {
+                        final Long hits = statisticsDO.getHits();
+                        hitsSum.updateAndGet(v -> v + hits);
+                        limitShowLoad.putIfAbsent(tag, 0L);
+                        limitShowLoad.put(tag, limitShowLoad.get(tag) + hits);
+                    });
 
             });
 
         limitShowLoad.forEach((k, v) -> {
-            final double limitLoad = (double)(v / hitsSum.get());
+            final double limitLoad = (double)v / hitsSum.get();
             final List<GoodsDO> currentTagsGoods = Lists.newArrayList();
             // 模糊匹配存在匹配不到的情况(因此以 10000为基数底层则是进行 1000的权比进行计算)
             final List<GoodsDO> goodsDOS = this.goodsWrapper.queryGoodsByTagsFuzzySearch(k, limitLoad);

@@ -1,8 +1,10 @@
 package com.cloud.mall.app.controller;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Objects;
 
+import com.cloud.mall.app.aop.annotaion.PortalInjectionAnnotation;
 import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.cates.CatesDomainService;
 import com.cloud.mall.domain.workbench.cates.model.Cate1sVO;
@@ -10,9 +12,13 @@ import com.cloud.mall.domain.workbench.cates.model.CatesVO;
 import com.cloud.mall.domain.workbench.goods.model.GoodsVO;
 import com.cloud.mall.domain.workbench.goods.GoodsDomainService;
 import com.cloud.mall.domain.workbench.shopping.ShoppingListDomainService;
+import com.cloud.mall.domain.workbench.tags.model.TagEnum;
+import com.cloud.mall.domain.workbench.tags.model.TagsDomainService;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
+import com.cloud.mall.infrastructure.data.dao.tags.TagsWrapper;
 import com.cloud.mall.infrastructure.dataObject.workbench.cate.CatesDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.goods.GoodsDO;
+import com.cloud.mall.infrastructure.dataObject.workbench.tags.TagsDO;
 import com.cloud.mall.infrastructure.result.ResultDto;
 import com.cloud.mall.infrastructure.result.exp.BizException;
 import com.cloud.mall.infrastructure.result.exp.BizExceptionProperties;
@@ -51,6 +57,7 @@ public class GoodsManagerController {
     private SimpleFunction simpleFunction;
     @Autowired
     private GoodsWrapper goodsWrapper;
+
 
     @ApiOperation("商家发布或更新商品")
     @PostMapping("/publishGoods")
@@ -145,3 +152,29 @@ public class GoodsManagerController {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
