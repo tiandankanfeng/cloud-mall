@@ -60,7 +60,7 @@ public class LoginAndRegistryController {
         final String key = Joiner.on("-")
             .skipNulls()
             .join(Lists.newArrayList(account, "registry", "captcha"));
-        final String captcha = (String)this.redisManager.get(key);
+        final String captcha = String.valueOf(this.redisManager.get(key));
         if (StrUtil.isBlank(captcha) || !captcha.equals(graphValidateCode)) {
             throw new BizException(BizExceptionProperties.CAPTCHA_VALIDATE_NOT_PASS.getMsg());
         }
