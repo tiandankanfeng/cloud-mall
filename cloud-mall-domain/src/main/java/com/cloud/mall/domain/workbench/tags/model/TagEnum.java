@@ -10,7 +10,8 @@ import cn.hutool.json.JSONObject;
 public enum TagEnum {
 
     FACT(1, "事实标签"),
-    RULE(2, "规则标签");
+    RULE(2, "规则标签"),
+    PREDICT(3, "预测标签");
 
     private final Integer code;
 

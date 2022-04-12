@@ -25,7 +25,7 @@ public class GoodsDO extends SequenceBaseDO {
     /**
      * 商品相关描述
      */
-    private String desc;
+    private String description;
 
     /**
      * 商品相关图片信息 urls

@@ -49,6 +49,7 @@ public class StatisticsDomainServiceImpl implements StatisticsDomainService {
                 .forEach(tag -> {
                     final StatisticsDO statisticsDO = new StatisticsDO()
                         .setUserId(userId)
+                        .setCate2Code(Long.valueOf(goodsDO.getCate2()))
                         .setTag(tag);
                     final List<StatisticsDO> statisticsDOS = this.statisticsWrapper.queryByParamAndOrderByHits(statisticsDO);
 
@@ -61,6 +62,7 @@ public class StatisticsDomainServiceImpl implements StatisticsDomainService {
                     } else { // insert
                         final StatisticsDO statisticsEntity = new StatisticsDO()
                             .setUserId(userId)
+                            .setCate2Code(Long.valueOf(goodsDO.getCate2()))
                             .setHits(1L)
                             .setTag(tag);
                         this.statisticsWrapper.updateUserInterestTags(statisticsEntity);
