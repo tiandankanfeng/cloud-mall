@@ -43,7 +43,8 @@ public class GoodsWrapperImpl implements GoodsWrapper {
             return Lists.newArrayList();
         }
 
-        final LambdaQueryWrapper<GoodsDO> lambdaQuery = Wrappers.<GoodsDO>lambdaQuery(goodsParam);
+        final LambdaQueryWrapper<GoodsDO> lambdaQuery = Wrappers.<GoodsDO>lambdaQuery(goodsParam)
+            .last("limit 1000");
         return this.goodsMapper.selectList(lambdaQuery);
     }
 

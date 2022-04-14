@@ -18,6 +18,13 @@ public interface UserWrapper {
     UserDO queryByUserId(Long userId);
 
     /**
+     * 根据用户名称匹配用户信息
+     * @param userNick
+     * @return
+     */
+    UserDO queryByUserNick(String userNick);
+
+    /**
      * 根据用户信息进行匹配
      * @param userParam
      * @return

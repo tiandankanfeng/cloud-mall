@@ -15,6 +15,8 @@ public enum BizExceptionProperties {
     USER_IDENTITY_VALIDATE_NOT_PASS("用户角色校验未通过!"),
     PARAM_VALIDATE_NOT_PASS("参数校验未通过!"),
     ACCOUNT_ALREADY_USERD_BY_OTHERS("账户已被其他人使用, 请更换"),
+    USER_NOT_EXITS("用户不存在, 请先进行注册!"),
+    USER_PSWD_AUTH_FAILED("用户账号密码认证不通过"),
     /**
      * default
      */

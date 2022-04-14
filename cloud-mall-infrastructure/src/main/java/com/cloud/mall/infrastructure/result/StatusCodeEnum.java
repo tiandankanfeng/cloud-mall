@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public enum StatusCodeEnum {
 
-    SUCCESS(200, "服务端响应正常"),
+    SUCCESS(20000, "服务端响应正常"),
     USER_BANNED(403, "用户没有权限访问对应资源"),
     SERVLET_INNER_ERROR(500, "服务端内部错误");
 

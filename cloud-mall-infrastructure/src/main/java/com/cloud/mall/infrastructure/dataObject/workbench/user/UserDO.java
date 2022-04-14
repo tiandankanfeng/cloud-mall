@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
  * @Description: 用户表
  */
 @Data
+
 //@SuperBuilder(toBuilder = true)
 @Accessors(chain = true)
 @TableName("user")

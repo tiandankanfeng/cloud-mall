@@ -44,19 +44,19 @@ class CloudMallInfrastructureApplicationTests {
         System.out.println("wu913428".split(" ")[0]);
     }
 
-    @Test
-    public void testMsgSend() {
-        final Future<MsgCodeEnum> future = MsgSendUtil.sendMsg("19855143393", "good night! airpods pro now!");
-        try {
-            // doSomething
-            final MsgCodeEnum msgCodeEnum = future.get();
-            System.out.println(msgCodeEnum);
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
-        } catch (final ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
+    //@Test
+    //public void testMsgSend() {
+    //    final Future<MsgCodeEnum> future = MsgSendUtil.sendMsg("19855143393", "good night! airpods pro now!");
+    //    try {
+    //        // doSomething
+    //        final MsgCodeEnum msgCodeEnum = future.get();
+    //        System.out.println(msgCodeEnum);
+    //    } catch (final InterruptedException e) {
+    //        e.printStackTrace();
+    //    } catch (final ExecutionException e) {
+    //        e.printStackTrace();
+    //    }
+    //}
 
     @Test
     public void testApiOnInstant() {

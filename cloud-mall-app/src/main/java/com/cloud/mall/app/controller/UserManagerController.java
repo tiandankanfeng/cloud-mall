@@ -7,6 +7,7 @@ import com.cloud.mall.app.aop.annotaion.PortalSessionAnnotation;
 import com.cloud.mall.domain.workbench.statistics.StatisticsDomainService;
 import com.cloud.mall.domain.workbench.user.UserDomainService;
 import com.cloud.mall.domain.workbench.user.model.UserHitsVo;
+import com.cloud.mall.domain.workbench.user.model.UserInfoVO;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserIdentityEnum;
 import com.cloud.mall.infrastructure.result.ResultDto;
@@ -93,6 +94,12 @@ public class UserManagerController {
     public ResultDto<String> getUserIdentity() {
         final UserIdentityEnum userIdentityEnum = SessionUtil.currentSession().getUserIdentityEnum();
         return new ResultDto<>(userIdentityEnum.getDesc());
+    }
+
+    @ApiOperation(("/获取用户信息"))
+    @GetMapping("/getUserInfo")
+    public ResultDto<UserInfoVO> getUserInfo(final String userNick) {
+        return new ResultDto<>(userDomainService.getUserInfo(userNick));
     }
 
 }

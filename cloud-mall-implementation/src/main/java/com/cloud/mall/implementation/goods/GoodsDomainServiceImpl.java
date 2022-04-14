@@ -116,7 +116,7 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
 
     @Override
     public List<GoodsDO> distinctGoodsInfo(final String distinctParam) {
-        // todo, 根据用户标签进行筛选排序(待验证)
+        // 根据用户标签进行筛选排序
         final List<GoodsDO> goodsDOList = this.goodsWrapper.distinctSearchGoodsInfo(distinctParam);
 
         if (Objects.nonNull(SessionUtil.currentSession())) {
@@ -135,8 +135,21 @@ public class GoodsDomainServiceImpl implements GoodsDomainService {
                     .distinct()
                     .collect(Collectors.toList());
 
-                return resOrderedList;
+                goodsDOList.clear();
+                // 添加排完序后的商品信息
+                goodsDOList.addAll(resOrderedList);
             }
+        }
+
+        // 考虑到用户可能登录了但此时肖像尚未被构建或者是根据标签筛选出来的商品数量比较少
+        if (CollectionUtils.isEmpty(goodsDOList) && goodsDOList.size() < 200) {
+            // 随机读取商品信息
+            List<GoodsDO> goodsDOS = goodsWrapper.queryGoodsByParam(null);
+            goodsDOS.stream()
+                .filter(goodsDO -> !goodsDOList.contains(goodsDO))
+                .forEach(goodsDO -> {
+                    goodsDOList.add(goodsDO);
+                });
         }
 
         return goodsDOList;

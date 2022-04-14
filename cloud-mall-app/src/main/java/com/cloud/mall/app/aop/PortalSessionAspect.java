@@ -120,19 +120,23 @@ public class PortalSessionAspect {
             // 返回失败相关信息(甚至可以直接抛出信息校验相关异常)
             proceed = (ResultDto)joinPoint.proceed();
         } catch (final Exception exp) {
+            // 状态码
+            final int code = exp instanceof BizException ?
+                BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg().equals(exp.getMessage()) ?
+                    StatusCodeEnum.USER_BANNED.getCode() : StatusCodeEnum.SERVLET_INNER_ERROR.getCode()
+            : StatusCodeEnum.SERVLET_INNER_ERROR.getCode();
             proceed = ResultDto.builder()
-                .msg(exp.getMessage())
+                .message(exp.getMessage())
                 .success(Boolean.FALSE)
-                .code(BizExceptionProperties.USER_NOT_AUTHORIZED.getMsg().equals(exp.getMessage()) ?
-                    StatusCodeEnum.USER_BANNED.getCode() : StatusCodeEnum.SERVLET_INNER_ERROR.getCode())
+                .code(code)
                 .build();
             PortalSessionAspect.log.info("ExpStackTrace:{}", exp.getStackTrace());
         } finally {
             proceed = Optional.ofNullable(proceed)
                 .orElse(new ResultDto());
-            if (StrUtil.isBlank(proceed.getMsg())) {
+            if (StrUtil.isBlank(proceed.getMessage())) {
                 proceed.setSuccess(Boolean.TRUE);
-                proceed.setMsg(BizExceptionProperties.METHOD_INVOKE_SUCCESS.getMsg());
+                proceed.setMessage(BizExceptionProperties.METHOD_INVOKE_SUCCESS.getMsg());
                 proceed.setCode(StatusCodeEnum.SUCCESS.getCode());
             }
 

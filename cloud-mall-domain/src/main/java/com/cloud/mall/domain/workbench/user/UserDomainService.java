@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.cloud.mall.domain.workbench.user.model.UserHitsVo;
+import com.cloud.mall.domain.workbench.user.model.UserInfoVO;
 import com.cloud.mall.infrastructure.dataObject.workbench.user.UserDO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,5 +77,12 @@ public interface UserDomainService {
      * @return
      */
     UserHitsVo getUserRecentlyHits(Long userId);
+
+    /**
+     * 获取用户信息
+     * @param userNick
+     * @return
+     */
+    UserInfoVO getUserInfo(String userNick);
 
 }

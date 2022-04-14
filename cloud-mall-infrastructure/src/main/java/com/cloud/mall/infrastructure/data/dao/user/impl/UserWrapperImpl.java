@@ -28,6 +28,13 @@ public class UserWrapperImpl implements UserWrapper {
     }
 
     @Override
+    public UserDO queryByUserNick(String userNick) {
+        LambdaQueryWrapper<UserDO> lambdaWrapper = Wrappers.<UserDO>lambdaQuery()
+            .eq(UserDO::getAccount, userNick);
+        return userMapper.selectOne(lambdaWrapper);
+    }
+
+    @Override
     public List<UserDO> queryByUserParam(final UserDO userParam) {
         if (Objects.isNull(userParam)) {
             return Lists.newArrayList();

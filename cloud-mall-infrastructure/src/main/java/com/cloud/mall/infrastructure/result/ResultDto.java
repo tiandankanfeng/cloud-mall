@@ -30,7 +30,12 @@ public class ResultDto<T> {
     /**
      * 异常信息
      */
-    private String msg;
+    private String message;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public ResultDto(final T data) {
         this.data = data;

@@ -22,6 +22,7 @@ import com.cloud.mall.domain.workbench.cates.model.Cate2sVO;
 import com.cloud.mall.domain.workbench.cates.model.CatesVO;
 import com.cloud.mall.domain.workbench.user.UserDomainService;
 import com.cloud.mall.domain.workbench.user.model.UserHitsVo;
+import com.cloud.mall.domain.workbench.user.model.UserInfoVO;
 import com.cloud.mall.infrastructure.data.dao.goods.GoodsWrapper;
 import com.cloud.mall.infrastructure.data.dao.msg.MsgRecordWrapper;
 import com.cloud.mall.infrastructure.data.dao.statistics.StatisticsWrapper;
@@ -40,6 +41,7 @@ import com.cloud.mall.infrastructure.utils.RedisManager;
 import com.cloud.mall.infrastructure.utils.SessionUtil;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,10 +79,13 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         if (CollectionUtil.isNotEmpty(userDOList)) {
             final UserDO userDO = userDOList.get(0);
-            return userDO.getPswd().equals(this.simpleFunction.encryptCode().apply(pswd)) ?
-                userDO.getId() : 0L;
+            if (userDO.getPswd().equals(this.simpleFunction.encryptCode().apply(pswd))) {
+                return userDO.getId();
+            }
+            // 密码认证不通过
+            throw new BizException(BizExceptionProperties.USER_PSWD_AUTH_FAILED.getMsg());
         }
-        return 0L;
+        throw new BizException(BizExceptionProperties.USER_NOT_EXITS.getMsg());
     }
 
     @Override
@@ -240,6 +245,17 @@ public class UserDomainServiceImpl implements UserDomainService {
         userHitsVo.setUserId(userId);
         userHitsVo.setUserNick(SessionUtil.currentSession().getUserNick());
         return userHitsVo;
+    }
+
+    @Override
+    public UserInfoVO getUserInfo(final String userNick) {
+        final UserDO userDO = userWrapper.queryByUserNick(userNick);
+        final UserInfoVO userInfoVO = new UserInfoVO();
+        if (Objects.nonNull(userDO)) {
+            BeanUtils.copyProperties(userDO, userInfoVO);
+        }
+
+        return userInfoVO;
     }
 
     private void doUserAuthentication(final UserDO userDO) {
