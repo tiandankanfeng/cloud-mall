@@ -28,7 +28,7 @@ class CloudMallInfrastructureApplicationTests {
     @Test
     public void testDbOnEncrypt() throws Exception {
         System.out.println("hello world");
-        val userName = "Wu913428!";
+        val userName = "test";
         final String[] keyPair = ConfigTools.genKeyPair(512);
         // 私钥
         val privateKey = keyPair[0];

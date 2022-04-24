@@ -32,7 +32,7 @@ Session说明：用户注册, 登陆成功后, 前端会将用户信息相关存
 使用 `spring-cloud-function`函数式编写工具方法, 抽取重复功能代码以及优化程序性能
 
 已启用 ZGC：
-`nohup java -jar -XX:StartFlightRecording -XX:+UseZGC -Xmx2g  cloud-mall-app-1.0.0-SNAPSHOT.jar &`
+`nohup java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8060 -XX:StartFlightRecording -XX:+UseZGC -Xmx2g  cloud-mall-app-1.0.0-SNAPSHOT.jar &`
 ```shell
 [root@VM-12-8-centos workplace]# jinfo -flags 535139
 VM Flags:

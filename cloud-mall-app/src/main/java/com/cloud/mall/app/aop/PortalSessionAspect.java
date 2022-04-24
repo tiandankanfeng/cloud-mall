@@ -80,6 +80,8 @@ public class PortalSessionAspect {
             }
         }
 
+        System.out.println("-------------------------------------cookie info:" + cookies);
+
         ResultDto proceed = null;
         try {
             boolean authorized = Boolean.FALSE;

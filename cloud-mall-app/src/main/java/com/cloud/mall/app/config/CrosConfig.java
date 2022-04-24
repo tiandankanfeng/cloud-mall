@@ -13,16 +13,36 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CrosConfig {
 
+    public static final String[] ORIGINS = new String[]{"GET", "POST", "PUT", "DELETE"};
+
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(final CorsRegistry registry) {
                 registry.addMapping("/**")
-                    .allowedOrigins("*")
-                    .allowedMethods("*");
+                    .allowedOriginPatterns("*")
+                    .allowedMethods("*")
+                    .allowedHeaders("*")
+                    .allowCredentials(true);
 
             }
         };
     }
+
+    //@Bean
+    //public WebMvcConfigurer corsConfigurer() {
+    //    return new CorsConfigurer();
+    //}
+    //
+    //public static class CorsConfigurer implements WebMvcConfigurer {
+    //    @Override
+    //    public void addCorsMappings(final CorsRegistry registry) {
+    //        registry.addMapping("/**")
+    //            .allowedOrigins("*")
+    //            .allowedMethods("*")
+    //            .allowedHeaders("*")
+    //            .allowCredentials(true);
+    //    }
+    //}
 }
